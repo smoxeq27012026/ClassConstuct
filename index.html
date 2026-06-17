@@ -3,478 +3,813 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCP:CS ~ Class Constructor</title>
+    <title>SCP:CS Class Constructor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'bg-primary': '#0d1117',
+                        'bg-secondary': '#161b22',
+                        'bg-tertiary': '#21262d',
+                        'border-primary': '#30363d',
+                        'text-primary': '#c9d1d9',
+                        'text-secondary': '#8b949e',
+                        'accent-blue': '#58a6ff',
+                        'accent-green': '#3fb950',
+                        'accent-purple': '#bc8cff',
+                        'accent-orange': '#d2991d',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         :root {
             --bg-primary: #0d1117;
             --bg-secondary: #161b22;
             --bg-tertiary: #21262d;
             --border: #30363d;
-            --text-primary: #c9d1d9;
+            --text: #c9d1d9;
             --text-secondary: #8b949e;
-            --accent: #7c3aed;
-            --accent-hover: #6d28d9;
-            --success: #238636;
-            --danger: #da3633;
-            --warning: #d2991d;
-            --radius: 8px;
-            --transition: 0.2s ease;
+            --accent: #58a6ff;
         }
 
         * {
-            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: #30363d transparent;
         }
 
-        body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
+        *::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        *::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 3px;
+        }
+        *::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
         }
 
-        /* Railway-inspired glass morphism */
-        .glass-panel {
-            background: rgba(22, 27, 34, 0.8);
-            backdrop-filter: blur(12px);
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker,
+        details > summary::marker {
+            display: none;
+        }
+
+        .sidebar-card {
+            background: var(--bg-secondary);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
-            transition: all var(--transition);
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+        .sidebar-card:hover {
+            border-color: #484f58;
         }
 
-        .glass-panel:hover {
-            border-color: rgba(124, 58, 237, 0.3);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        .input-field {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        .input-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: var(--bg-tertiary); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--border); }
-
-        /* Smooth transitions */
-        .transition-smooth {
-            transition: all var(--transition);
-        }
-
-        /* Toggle switch */
-        .toggle {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            background: var(--bg-tertiary);
-            border-radius: 12px;
+        .btn-primary {
+            background: #238636;
+            border: 1px solid #2ea043;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
             cursor: pointer;
-            transition: background var(--transition);
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .toggle.active {
-            background: var(--accent);
-        }
-        .toggle::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform var(--transition);
-        }
-        .toggle.active::after {
-            transform: translateX(20px);
+        .btn-primary:hover {
+            background: #2ea043;
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .layout-grid {
-                grid-template-columns: 1fr !important;
-            }
-            .code-panel {
-                height: 60vh !important;
-                position: relative !important;
-                top: 0 !important;
-            }
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        @media (max-width: 640px) {
-            body { padding: 8px; }
-            .config-grid { grid-template-columns: 1fr !important; }
+        .btn-secondary:hover {
+            background: #30363d;
+        }
+
+        .toggle-lang {
+            display: flex;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .toggle-lang button {
+            padding: 6px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            color: var(--text-secondary);
+            background: transparent;
+        }
+        .toggle-lang button.active {
+            background: #1f6feb;
+            color: white;
+        }
+
+        .code-area {
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 0 0 8px 8px;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #c9d1d9;
+            resize: none;
+        }
+
+        .remove-btn {
+            background: transparent;
+            border: 1px solid #f8514966;
+            color: #f85149;
+            border-radius: 6px;
+            padding: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .remove-btn:hover {
+            background: #f8514920;
+            border-color: #f85149;
         }
     </style>
 </head>
-<body class="min-h-screen p-3 md:p-6">
-    <div class="max-w-[1600px] mx-auto">
-
+<body class="bg-[#0d1117] text-[#c9d1d9] min-h-screen font-sans">
+    <div class="max-w-[1600px] mx-auto p-4 md:p-6 lg:p-8">
+        
         <!-- Header -->
-        <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+        <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#30363d]">
             <div class="flex items-center gap-3">
-                <i data-lucide="box" class="w-8 h-8 text-purple-500"></i>
+                <i data-lucide="package" class="w-8 h-8 text-[#bc8cff]"></i>
                 <div>
-                    <h1 class="text-xl font-bold">SCP Class Constructor</h1>
-                    <p class="text-xs text-gray-500">C# / XLUA PlayerClass Generator</p>
+                    <h1 class="text-xl font-semibold text-white">Class Constructor</h1>
+                    <p class="text-xs text-[#8b949e]">SCP: Classified Site • Генератор классов</p>
                 </div>
             </div>
-
-            <!-- Language & Mode Toggle -->
             <div class="flex items-center gap-3">
-                <div class="flex items-center gap-2 text-sm">
-                    <span class="text-gray-400">C#</span>
-                    <div class="toggle active" id="langToggle" onclick="toggleLanguage()"></div>
-                    <span class="text-gray-400">XLUA</span>
+                <div class="toggle-lang" id="langToggle">
+                    <button data-lang="csharp" class="active">C#</button>
+                    <button data-lang="xlua">XLUA</button>
                 </div>
-                <span id="langBadge" class="text-xs px-2 py-1 rounded bg-purple-600/20 text-purple-400 border border-purple-600/30">C# MODE</span>
+                <button class="btn-secondary" id="resetBtn">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Сброс
+                </button>
             </div>
         </header>
 
-        <!-- Main Grid -->
-        <div class="grid layout-grid gap-6" style="grid-template-columns: 1fr 1fr;">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             
-            <!-- Left: Configuration -->
-            <div class="space-y-4">
+            <!-- LEFT PANEL -->
+            <div class="space-y-4 overflow-y-auto max-h-[calc(100vh-160px)] pr-2">
                 
-                <!-- Basic Info -->
-                <div class="glass-panel p-4">
-                    <div class="flex items-center gap-2 mb-4" onclick="this.parentElement.querySelector('.panel-content').classList.toggle('hidden')">
-                        <i data-lucide="info" class="w-4 h-4 text-purple-400"></i>
-                        <h2 class="text-sm font-semibold">Основная информация</h2>
-                        <i data-lucide="chevron-down" class="w-4 h-4 ml-auto text-gray-500"></i>
-                    </div>
-                    <div class="panel-content grid grid-cols-2 gap-3">
+                <!-- Основная информация -->
+                <details class="sidebar-card" open>
+                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="info" class="w-4 h-4 text-[#58a6ff]"></i>
+                            Основная информация
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
+                    </summary>
+                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label class="text-xs text-gray-400 mb-1 block">Namespace / Module</label>
-                            <input type="text" id="namespace" value="MyPlugin" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Namespace</label>
+                            <input type="text" id="namespace" value="PluginExample" class="input-field">
                         </div>
                         <div>
-                            <label class="text-xs text-gray-400 mb-1 block">ClassName (Code)</label>
-                            <input type="text" id="className" value="CustomClass" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="text-xs text-gray-400 mb-1 block">Display Name (HTML allowed)</label>
-                            <input type="text" id="displayName" value="<b>Custom Role</b>" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Health & Color -->
-                <div class="glass-panel p-4">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="heart" class="w-4 h-4 text-red-400"></i>
-                        <h2 class="text-sm font-semibold">Здоровье & Цвет</h2>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div>
-                            <label class="text-xs text-gray-400 mb-1 block">Config Key</label>
-                            <input type="text" id="configHpKey" value="custom_health" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Название класса (в коде)</label>
+                            <input type="text" id="className" value="CustomClass" class="input-field">
                         </div>
                         <div>
-                            <label class="text-xs text-gray-400 mb-1 block">Default HP</label>
-                            <input type="number" id="defaultHp" value="100" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Отображаемое имя</label>
+                            <input type="text" id="displayName" value="<b>Уборщик</b>" class="input-field">
                         </div>
-                        <div>
-                            <label class="text-xs text-gray-400 mb-1 block">HEX Color</label>
-                            <div class="flex gap-1">
-                                <input type="color" id="hexColorPicker" value="#7c3aed" class="w-10 h-10 rounded border-0 cursor-pointer bg-transparent">
-                                <input type="text" id="hexColorText" value="#7c3aed" class="flex-1 bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white uppercase">
+                        <div class="flex gap-2">
+                            <div class="flex-1">
+                                <label class="block text-xs text-[#8b949e] mb-1.5">Ключ HP</label>
+                                <input type="text" id="configHpKey" value="janitor_health" class="input-field">
+                            </div>
+                            <div class="w-20">
+                                <label class="block text-xs text-[#8b949e] mb-1.5">HP</label>
+                                <input type="number" id="defaultHp" value="100" class="input-field">
                             </div>
                         </div>
                     </div>
-                </div>
+                </details>
 
-                <!-- Display Settings -->
-                <div class="glass-panel p-4">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="eye" class="w-4 h-4 text-blue-400"></i>
-                        <h2 class="text-sm font-semibold">Отображение</h2>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
+                <!-- Отображение и Цвет -->
+                <details class="sidebar-card" open>
+                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="palette" class="w-4 h-4 text-[#d2991d]"></i>
+                            Отображение и Цвет
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
+                    </summary>
+                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label class="text-xs text-gray-400 mb-1 block">Category</label>
-                            <input type="text" id="category" value="Custom" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                            <label class="block text-xs text-[#8b949e] mb-1.5">HEX Цвет</label>
+                            <div class="flex gap-2">
+                                <input type="color" id="hexColorPicker" value="#fb00ff" class="h-10 w-10 rounded border-none cursor-pointer bg-transparent p-0">
+                                <input type="text" id="hexColorText" value="#fb00ff" class="input-field uppercase flex-1">
+                            </div>
                         </div>
                         <div>
-                            <label class="text-xs text-gray-400 mb-1 block">Icon</label>
-                            <input type="text" id="icon" value="SCPIcon" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Категория</label>
+                            <input type="text" id="category" value="Administration" class="input-field">
                         </div>
-                        <div class="col-span-2">
-                            <label class="text-xs text-gray-400 mb-1 block">Description (\n for new line)</label>
-                            <textarea id="description" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white min-h-[60px]">Custom role description.\nSecond line.</textarea>
+                        <div>
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Иконка</label>
+                            <input type="text" id="icon" value="ScientistIcon" class="input-field">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Описание (\\n для переноса)</label>
+                            <textarea id="description" class="input-field min-h-[70px]" rows="2">Убирайте комплекс.\nПомогайте ученым.</textarea>
                         </div>
                     </div>
-                </div>
+                </details>
 
-                <!-- Spawn & Model -->
-                <div class="glass-panel p-4">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="user" class="w-4 h-4 text-green-400"></i>
-                        <h2 class="text-sm font-semibold">Модель & Спавн</h2>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
+                <!-- Спавн, Модель и Команда -->
+                <details class="sidebar-card" open>
+                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="user-plus" class="w-4 h-4 text-[#3fb950]"></i>
+                            Спавн, Модель и Команда
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
+                    </summary>
+                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label class="text-xs text-gray-400 mb-1 block">Player Model</label>
-                            <select id="modelSelect" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
-                                <option value="ply_scientist">ply_scientist</option>
-                                <option value="ply_classD">ply_classD</option>
-                                <option value="ply_guard">ply_guard</option>
-                                <option value="ply_mtf">ply_mtf</option>
-                                <option value="ply_chaosInsurgency">ply_chaosInsurgency</option>
-                            </select>
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Модель</label>
+                            <select id="modelSelect" class="input-field"></select>
+                        </div>
+                        <div class="flex items-end">
+                            <span class="text-xs text-[#8b949e]">Рэгдолл: <b id="ragdollPreview" class="text-[#bc8cff] font-mono">ply_scientist_ragdoll</b></span>
                         </div>
                         <div>
-                            <label class="text-xs text-gray-400 mb-1 block">Spawn Point</label>
-                            <select id="spawnSelect" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
-                                <option value="scientistSpawn">scientistSpawn</option>
-                                <option value="classDSpawn">classDSpawn</option>
-                                <option value="mtfSpawn">mtfSpawn</option>
-                                <option value="chaosSpawn">chaosSpawn</option>
-                            </select>
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Точка спавна</label>
+                            <select id="spawnPointSelect" class="input-field"></select>
                         </div>
                         <div>
-                            <label class="text-xs text-gray-400 mb-1 block">Team ID</label>
-                            <select id="teamSelect" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
-                                <option value="MTF">MTF</option>
-                                <option value="ClassD">ClassD</option>
-                                <option value="SCP">SCP</option>
-                                <option value="Spectator">Spectator</option>
-                            </select>
+                            <label class="block text-xs text-[#8b949e] mb-1.5">Team ID</label>
+                            <select id="teamIdSelect" class="input-field"></select>
                         </div>
                     </div>
-                </div>
+                </details>
+
+                <!-- Голосовой чат -->
+                <details class="sidebar-card" open>
+                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="mic" class="w-4 h-4 text-[#58a6ff]"></i>
+                            Голосовой чат
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
+                    </summary>
+                    <div class="p-4 space-y-2">
+                        <div id="voiceChatList" class="space-y-2"></div>
+                        <button id="addVoiceChatBtn" class="btn-secondary w-full justify-center text-xs py-2">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Добавить канал
+                        </button>
+                    </div>
+                </details>
+
+                <!-- Инвентарь -->
+                <details class="sidebar-card" open>
+                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="backpack" class="w-4 h-4 text-[#d2991d]"></i>
+                            Инвентарь
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
+                    </summary>
+                    <div class="p-4 space-y-2">
+                        <div id="itemsList" class="space-y-2"></div>
+                        <button id="addItemBtn" class="btn-secondary w-full justify-center text-xs py-2">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Добавить предмет
+                        </button>
+                    </div>
+                </details>
 
                 <!-- Overrides -->
-                <div class="glass-panel p-4">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="settings-2" class="w-4 h-4 text-yellow-400"></i>
-                        <h2 class="text-sm font-semibold">Overrides</h2>
-                    </div>
-                    <div class="space-y-2" id="overridesContainer">
-                        <!-- Generated by JS -->
-                    </div>
-                </div>
-
-                <!-- Inventory -->
-                <div class="glass-panel p-4">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="backpack" class="w-4 h-4 text-orange-400"></i>
-                        <h2 class="text-sm font-semibold">Инвентарь</h2>
-                    </div>
-                    <div id="itemsList" class="space-y-2 mb-3"></div>
-                    <button onclick="addItem()" class="w-full flex items-center justify-center gap-2 text-sm p-2 rounded border border-dashed border-[#30363d] hover:border-purple-500 transition-smooth">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Добавить предмет
-                    </button>
-                </div>
+                <details class="sidebar-card">
+                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="settings-2" class="w-4 h-4 text-[#bc8cff]"></i>
+                            Overrides
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
+                    </summary>
+                    <div class="p-4 space-y-3" id="overridesContainer"></div>
+                </details>
             </div>
 
-            <!-- Right: Code Output -->
-            <div class="code-panel lg:sticky top-6 flex flex-col" style="height: calc(100vh - 3rem);">
-                <div class="flex items-center justify-between p-3 bg-[#161b22] border border-[#30363d] rounded-t-lg">
+            <!-- RIGHT PANEL -->
+            <div class="xl:sticky top-6 flex flex-col" style="height: calc(100vh - 140px);">
+                <div class="flex items-center justify-between bg-[#161b22] rounded-t-lg border border-b-0 border-[#30363d] p-3">
                     <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
-                        <span id="fileName" class="text-sm">CustomClass.cs</span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#3fb950]"></span>
+                        <span id="fileNameDisplay" class="text-sm font-mono text-[#c9d1d9]">CustomClass.cs</span>
                     </div>
-                    <button onclick="copyCode()" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-purple-600 hover:bg-purple-500 transition-smooth">
+                    <button id="copyBtn" class="btn-primary text-xs py-1.5 px-3">
                         <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                        <span id="copyBtnText">Copy</span>
+                        <span id="copyText">Копировать</span>
                     </button>
                 </div>
-                <div class="flex-1 bg-[#0d1117] border border-t-0 border-[#30363d] rounded-b-lg overflow-hidden">
-                    <textarea id="codeOutput" readonly class="w-full h-full bg-transparent p-4 font-mono text-xs md:text-sm resize-none text-gray-300 outline-none"></textarea>
+                <div class="flex-1 relative">
+                    <textarea id="codeOutput" readonly class="code-area absolute inset-0 w-full h-full p-4" spellcheck="false"></textarea>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // State
+        // ============ DATA ============
+        const MODELS = [
+            "ply_classD", "ply_guard", "ply_mtf", "ply_chaosInsurgency", "ply_scientist",
+            "ply_scp049", "ply_scp096", "ply_scp106", "ply_scp173", "ply_scp0492", "ply_scp939", "ply_scp999"
+        ];
+        const SPAWN_POINTS = [
+            "chaosSpawn", "mtfSpawn", "classDSpawn", "scientistSpawn", "guardSpawn",
+            "scp173Spawn", "scp096Spawn", "scp999Spawn", "scp049Spawn", "scp079Spawn", "scp939Spawn"
+        ];
+        const ITEMS = [
+            "Coin", "Cuffer", "Cup", "FirstAid", "FirstAid2", "FlashGrenade", "FragGrenade", "Flashlight", "Radio",
+            "SCP035", "SCP420J", "SCP500", "AnalystCard", "AssistantCard", "BreakingCard", "ContainmentSpecialistCard",
+            "EngineerCard", "FacilityDirectorCard", "FacilityManagerCard", "FoundationAgentCard", "GuardCard", "JanitorCard",
+            "MTFCommanderCard", "MTFOperativeCard", "O5Card", "RecruitCard", "ScientistCard", "SeniorEngineerCard",
+            "SeniorScientistCard", "ZoneManagerCard", "Ammo.A9x19", "Ammo.A45", "Ammo.A46x30", "Ammo.A545x39", "Ammo.A556x45",
+            "Ammo.A762x39", "AK12", "ASVAL", "CZ75B", "FAL", "G36C", "G56", "M170", "MicroHID", "SR3M", "USP", "VSS"
+        ];
+        const TEAMS = ["ClassD", "MTF", "SCP", "Spectator", "None"];
+        const VOICE_CHANNELS = ["3D", "Intercom", "Spectator", "SCP"];
+
+        // ============ STATE ============
         let currentLang = 'csharp';
-        let items = [];
         let state = {
+            items: [],
+            voiceChats: [{ channel: "3D", active: true }],
             overrides: {
-                OnOpenInventory: { enabled: false, value: true, type: 'bool', label: 'OnOpenInventory' },
-                IgnoreSCP: { enabled: false, value: false, type: 'bool', label: 'IgnoreSCP' },
-                CheckpointPass: { enabled: false, value: false, type: 'bool', label: 'CheckpointPass' },
-                CanInteract: { enabled: true, value: true, type: 'bool', label: 'CanInteract' },
-                CanMove: { enabled: true, value: true, type: 'bool', label: 'CanMove' },
-                CanTakeDamage: { enabled: true, value: true, type: 'bool', label: 'CanTakeDamage' },
-                UserCameraRotation: { enabled: false, value: false, type: 'bool', label: 'UseCameraRotation' },
-                GetResistance: { enabled: false, value: 1.0, type: 'number', label: 'GetResistance' },
-                GetSpectatorBone: { enabled: false, value: '', type: 'text', label: 'GetSpectatorBone' },
-                GetPlayerInfo: { enabled: false, value: '', type: 'text', label: 'GetPlayerInfo' },
-                GetDeadInfo: { enabled: false, value: '', type: 'text', label: 'GetDeadInfo' }
+                OnOpenInventory: { enabled: true, type: "bool", value: true, label: "OnOpenInventory" },
+                CanMove: { enabled: false, type: "bool", value: true, label: "CanMove" },
+                CanInteract: { enabled: false, type: "bool", value: true, label: "CanInteract" },
+                CanTakeDamage: { enabled: false, type: "bool", value: true, label: "CanTakeDamage" },
+                IgnoreSCP: { enabled: false, type: "bool", value: false, label: "IgnoreSCP" },
+                CheckpointPass: { enabled: false, type: "bool", value: false, label: "CheckpointPass" },
+                UseCameraRotation: { enabled: false, type: "bool", value: false, label: "UserCameraRotation" },
+                GetPlayerInfo: { enabled: false, type: "text", value: "Сотрудник клининга", label: "GetPlayerInfo" },
+                GetDeadInfo: { enabled: false, type: "text", value: "Мертвый уборщик", label: "GetDeadInfo" },
+                GetResistance: { enabled: false, type: "number", value: 1.0, label: "GetResistance (float)" },
+                GetSpectatorBone: { enabled: false, type: "text", value: "DeathCam", label: "GetSpectatorBone" }
             }
         };
 
-        // ITEMS
-        const ITEMS = ["Coin", "Cuffer", "Cup", "FirstAid", "FirstAid2", "FlashGrenade", "FragGrenade", 
-            "Flashlight", "Radio", "SCP035", "SCP420J", "SCP500", "AnalystCard", "AssistantCard", 
-            "BreakingCard", "ContainmentSpecialistCard", "EngineerCard", "FacilityDirectorCard", 
-            "FacilityManagerCard", "FoundationAgentCard", "GuardCard", "JanitorCard", "MTFCommanderCard",
-            "MTFOperativeCard", "O5Card", "RecruitCard", "ScientistCard", "SeniorEngineerCard",
-            "SeniorScientistCard", "ZoneManagerCard", "AK12", "ASVAL", "CZ75B", "FAL", "G36C", "G56",
-            "M170", "MicroHID", "SR3M", "USP", "VSS", "Ammo.A9x19", "Ammo.A45", "Ammo.A46x30", 
-            "Ammo.A545x39", "Ammo.A556x45", "Ammo.A762x39"];
+        // ============ UTILS ============
+        const el = id => document.getElementById(id);
+        const hexToRgb = (hex) => {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: (parseInt(result[1], 16) / 255).toFixed(3),
+                g: (parseInt(result[2], 16) / 255).toFixed(3),
+                b: (parseInt(result[3], 16) / 255).toFixed(3)
+            } : { r: 1, g: 1, b: 1 };
+        };
+        const stripHtml = str => str.replace(/<\/?[^>]+(>|$)/g, "");
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'csharp' ? 'xlua' : 'csharp';
-            document.getElementById('langToggle').classList.toggle('active', currentLang === 'xlua');
-            document.getElementById('langBadge').textContent = currentLang === 'csharp' ? 'C# MODE' : 'XLUA MODE';
-            document.getElementById('langBadge').className = currentLang === 'csharp' 
-                ? 'text-xs px-2 py-1 rounded bg-purple-600/20 text-purple-400 border border-purple-600/30'
-                : 'text-xs px-2 py-1 rounded bg-green-600/20 text-green-400 border border-green-600/30';
-            document.getElementById('fileName').textContent = 
-                currentLang === 'csharp' ? (document.getElementById('className').value || 'CustomClass') + '.cs'
-                : (document.getElementById('className').value || 'CustomClass') + '.lua';
+        // ============ INIT ============
+        function init() {
+            populateSelect('modelSelect', MODELS, 'ply_scientist');
+            populateSelect('spawnPointSelect', SPAWN_POINTS, 'scientistSpawn');
+            populateSelect('teamIdSelect', TEAMS, 'ClassD');
+
+            renderVoiceChats();
+            renderItems();
+            renderOverrides();
+            setupListeners();
+            lucide.createIcons();
             generateCode();
         }
 
-        function renderOverrides() {
-            const container = document.getElementById('overridesContainer');
-            container.innerHTML = '';
-            Object.entries(state.overrides).forEach(([key, data]) => {
-                const div = document.createElement('div');
-                div.className = 'flex items-center justify-between p-2 rounded bg-[#0d1117]/50 border border-[#21262d] gap-3';
-                div.innerHTML = `
-                    <label class="flex items-center gap-2 cursor-pointer text-sm min-w-max">
-                        <input type="checkbox" ${data.enabled ? 'checked' : ''} 
-                            onchange="state.overrides['${key}'].enabled = this.checked; renderOverrides(); generateCode()"
-                            class="rounded border-gray-600 text-purple-500 bg-transparent">
-                        ${data.label}
-                    </label>
-                    <div class="flex-1 flex justify-end" id="override-val-${key}"></div>
-                `;
-                container.appendChild(div);
-                
-                const valContainer = document.getElementById('override-val-' + key);
-                if (data.enabled) {
-                    if (data.type === 'bool') {
-                        const sel = document.createElement('select');
-                        sel.className = 'bg-[#0d1117] border border-[#30363d] rounded p-1 text-xs text-white';
-                        sel.innerHTML = `<option value="true" ${data.value ? 'selected' : ''}>true</option>
-                                         <option value="false" ${!data.value ? 'selected' : ''}>false</option>`;
-                        sel.onchange = (e) => { data.value = e.target.value === 'true'; generateCode(); };
-                        valContainer.appendChild(sel);
-                    } else {
-                        const inp = document.createElement('input');
-                        inp.type = data.type === 'number' ? 'number' : 'text';
-                        if (data.type === 'number') inp.step = '0.1';
-                        inp.value = data.value;
-                        inp.className = 'bg-[#0d1117] border border-[#30363d] rounded p-1 px-2 text-xs text-white w-full max-w-[150px]';
-                        inp.oninput = (e) => { data.value = data.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value; generateCode(); };
-                        valContainer.appendChild(inp);
-                    }
-                }
+        function populateSelect(id, options, def) {
+            const s = el(id);
+            s.innerHTML = options.map(o => `<option value="${o}" ${o === def ? 'selected' : ''}>${o}</option>`).join('');
+        }
+
+        // ============ LISTENERS ============
+        function setupListeners() {
+            const inputs = ['namespace', 'className', 'displayName', 'configHpKey', 'defaultHp',
+                'category', 'icon', 'description', 'modelSelect', 'spawnPointSelect', 'teamIdSelect'
+            ];
+            inputs.forEach(id => el(id).addEventListener('input', generateCode));
+
+            el('hexColorPicker').addEventListener('input', e => {
+                el('hexColorText').value = e.target.value;
+                generateCode();
+            });
+            el('hexColorText').addEventListener('input', e => {
+                el('hexColorPicker').value = e.target.value;
+                generateCode();
+            });
+            el('modelSelect').addEventListener('change', e => {
+                el('ragdollPreview').innerText = e.target.value + '_ragdoll';
+            });
+
+            el('addVoiceChatBtn').addEventListener('click', () => {
+                state.voiceChats.push({ channel: '3D', active: true });
+                renderVoiceChats();
+                generateCode();
+            });
+            el('addItemBtn').addEventListener('click', () => {
+                state.items.push('Coin');
+                renderItems();
+                generateCode();
+            });
+
+            el('copyBtn').addEventListener('click', () => {
+                navigator.clipboard.writeText(el('codeOutput').value);
+                const t = el('copyText');
+                t.innerText = 'Скопировано!';
+                setTimeout(() => { t.innerText = 'Копировать'; }, 2000);
+            });
+
+            el('resetBtn').addEventListener('click', () => {
+                state.items = [];
+                state.voiceChats = [{ channel: '3D', active: true }];
+                Object.keys(state.overrides).forEach(k => {
+                    state.overrides[k].enabled = ['OnOpenInventory'].includes(k);
+                });
+                el('namespace').value = 'PluginExample';
+                el('className').value = 'CustomClass';
+                el('displayName').value = '<b>Уборщик</b>';
+                el('configHpKey').value = 'janitor_health';
+                el('defaultHp').value = 100;
+                el('hexColorPicker').value = '#fb00ff';
+                el('hexColorText').value = '#fb00ff';
+                el('category').value = 'Administration';
+                el('icon').value = 'ScientistIcon';
+                el('description').value = 'Убирайте комплекс.\\nПомогайте ученым.';
+                el('modelSelect').value = 'ply_scientist';
+                el('spawnPointSelect').value = 'scientistSpawn';
+                el('teamIdSelect').value = 'ClassD';
+                renderVoiceChats();
+                renderItems();
+                renderOverrides();
+                generateCode();
+            });
+
+            // Language toggle
+            document.querySelectorAll('#langToggle button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#langToggle button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentLang = btn.dataset.lang;
+                    el('fileNameDisplay').innerText = el('className').value + (currentLang === 'xlua' ? '.lua' : '.cs');
+                    generateCode();
+                });
             });
         }
 
-        function addItem() {
-            items.push('Coin');
-            renderItems();
-            generateCode();
+        // ============ RENDER DYNAMIC ============
+        function renderVoiceChats() {
+            const c = el('voiceChatList');
+            c.innerHTML = '';
+            state.voiceChats.forEach((vc, i) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center gap-2 bg-[#0d1117] p-2 rounded border border-[#30363d]';
+
+                const sel = document.createElement('select');
+                sel.className = 'input-field text-xs py-1 flex-1';
+                sel.innerHTML = VOICE_CHANNELS.map(ch => `<option value="${ch}" ${ch === vc.channel ? 'selected' : ''}>${ch}</option>`).join('');
+                sel.addEventListener('change', e => { state.voiceChats[i].channel = e.target.value; generateCode(); });
+
+                const lbl = document.createElement('label');
+                lbl.className = 'flex items-center gap-1.5 text-xs text-[#c9d1d9] cursor-pointer whitespace-nowrap';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.checked = vc.active;
+                cb.className = 'rounded';
+                cb.addEventListener('change', e => { state.voiceChats[i].active = e.target.checked; generateCode(); });
+                lbl.appendChild(cb);
+                lbl.appendChild(document.createTextNode('Вкл'));
+
+                const del = document.createElement('button');
+                del.className = 'remove-btn';
+                del.innerHTML = '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>';
+                del.addEventListener('click', () => { state.voiceChats.splice(i, 1); renderVoiceChats(); generateCode(); });
+
+                div.appendChild(sel);
+                div.appendChild(lbl);
+                div.appendChild(del);
+                c.appendChild(div);
+            });
         }
 
         function renderItems() {
-            const container = document.getElementById('itemsList');
-            container.innerHTML = '';
-            items.forEach((item, i) => {
+            const c = el('itemsList');
+            c.innerHTML = '';
+            state.items.forEach((item, i) => {
                 const div = document.createElement('div');
                 div.className = 'flex gap-2';
+
                 const sel = document.createElement('select');
-                sel.className = 'flex-1 bg-[#0d1117] border border-[#30363d] rounded p-2 text-sm text-white';
+                sel.className = 'input-field flex-1 text-xs';
                 sel.innerHTML = ITEMS.map(it => `<option value="${it}" ${it === item ? 'selected' : ''}>${it}</option>`).join('');
-                sel.onchange = (e) => { items[i] = e.target.value; generateCode(); };
+                sel.addEventListener('change', e => { state.items[i] = e.target.value; generateCode(); });
+
                 const del = document.createElement('button');
-                del.className = 'text-red-400 hover:text-red-300 p-2';
-                del.innerHTML = '<i data-lucide="trash-2" class="w-4 h-4"></i>';
-                del.onclick = () => { items.splice(i, 1); renderItems(); generateCode(); };
+                del.className = 'remove-btn';
+                del.innerHTML = '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>';
+                del.addEventListener('click', () => { state.items.splice(i, 1); renderItems(); generateCode(); });
+
                 div.appendChild(sel);
                 div.appendChild(del);
-                container.appendChild(div);
+                c.appendChild(div);
             });
-            lucide.createIcons();
         }
 
-        function hexToRgb(hex) {
-            const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return r ? `${(parseInt(r[1],16)/255).toFixed(3)}f, ${(parseInt(r[2],16)/255).toFixed(3)}f, ${(parseInt(r[3],16)/255).toFixed(3)}f` : '1f, 1f, 1f';
+        function renderOverrides() {
+            const c = el('overridesContainer');
+            c.innerHTML = '';
+            Object.keys(state.overrides).forEach(key => {
+                const data = state.overrides[key];
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between gap-3 p-2 rounded bg-[#0d1117] border border-[#30363d] flex-wrap';
+
+                const lbl = document.createElement('label');
+                lbl.className = 'flex items-center gap-2 cursor-pointer text-xs text-[#c9d1d9]';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.checked = data.enabled;
+                cb.className = 'rounded';
+                lbl.appendChild(cb);
+                lbl.appendChild(document.createTextNode(data.label));
+
+                const vc = document.createElement('div');
+                vc.className = 'flex-1 flex justify-end min-w-[100px]';
+
+                const updateVal = () => {
+                    vc.innerHTML = '';
+                    if (data.enabled) {
+                        if (data.type === 'bool') {
+                            const s = document.createElement('select');
+                            s.className = 'input-field text-xs py-1';
+                            s.innerHTML = `<option value="true" ${data.value ? 'selected' : ''}>true</option><option value="false" ${!data.value ? 'selected' : ''}>false</option>`;
+                            s.addEventListener('change', e => { data.value = e.target.value === 'true'; generateCode(); });
+                            vc.appendChild(s);
+                        } else {
+                            const inp = document.createElement('input');
+                            inp.type = data.type;
+                            inp.value = data.value;
+                            inp.className = 'input-field text-xs py-1 max-w-[140px]';
+                            if (data.type === 'number') inp.step = '0.1';
+                            inp.addEventListener('input', e => {
+                                data.value = data.type === 'number' ? (parseFloat(e.target.value) || 0) : e.target.value;
+                                generateCode();
+                            });
+                            vc.appendChild(inp);
+                        }
+                    }
+                };
+
+                cb.addEventListener('change', e => { data.enabled = e.target.checked; updateVal(); generateCode(); });
+                updateVal();
+                div.appendChild(lbl);
+                div.appendChild(vc);
+                c.appendChild(div);
+            });
         }
 
-        function stripHtml(s) { return s.replace(/<[^>]*>/g, ''); }
-
+        // ============ CODE GENERATION ============
         function generateCode() {
-            const ns = document.getElementById('namespace').value || 'MyPlugin';
-            const cn = document.getElementById('className').value || 'CustomClass';
-            const dn = document.getElementById('displayName').value || 'Custom Role';
-            const clean = stripHtml(dn);
-            const hpKey = document.getElementById('configHpKey').value || 'custom_health';
-            const hp = document.getElementById('defaultHp').value || 100;
-            const hex = (document.getElementById('hexColorText').value || '#7c3aed').replace('#', '');
-            const rgb = hexToRgb('#' + hex);
-            const cat = document.getElementById('category').value || 'Custom';
-            const icon = document.getElementById('icon').value || 'SCPIcon';
-            const desc = (document.getElementById('description').value || '').replace(/\n/g, '\\n');
-            const model = document.getElementById('modelSelect').value || 'ply_scientist';
-            const spawn = document.getElementById('spawnSelect').value || 'scientistSpawn';
-            const team = document.getElementById('teamSelect').value || 'MTF';
+            const v = {
+                namespace: el('namespace').value || 'PluginExample',
+                className: el('className').value || 'CustomClass',
+                displayName: el('displayName').value,
+                cleanName: stripHtml(el('displayName').value),
+                configHpKey: el('configHpKey').value,
+                defaultHp: el('defaultHp').value,
+                hexColor: el('hexColorText').value,
+                category: el('category').value,
+                description: el('description').value.replace(/\n/g, '\\n'),
+                icon: el('icon').value,
+                model: el('modelSelect').value,
+                spawnPoint: el('spawnPointSelect').value,
+                teamId: el('teamIdSelect').value
+            };
 
-            const itemsStr = items.map(i => `                player.GiveItem("${i}");`).join('\n');
-            
-            let ovrStr = '';
-            const ov = state.overrides;
-            if (ov.OnOpenInventory.enabled) ovrStr += `\n        public override bool OnOpenInventory() => ${ov.OnOpenInventory.value ? 'true' : 'false'};\n`;
-            if (ov.IgnoreSCP.enabled) ovrStr += `\n        public override bool IgnoreSCP() => ${ov.IgnoreSCP.value ? 'true' : 'false'};\n`;
-            if (ov.CheckpointPass.enabled) ovrStr += `\n        public override bool CheckpointPass() => ${ov.CheckpointPass.value ? 'true' : 'false'};\n`;
-            if (ov.CanInteract.enabled) ovrStr += `\n        public override bool CanInteract() => ${ov.CanInteract.value ? 'true' : 'false'};\n`;
-            if (ov.CanMove.enabled) ovrStr += `\n        public override bool CanMove() => ${ov.CanMove.value ? 'true' : 'false'};\n`;
-            if (ov.CanTakeDamage.enabled) ovrStr += `\n        public override bool CanTakeDamage() => ${ov.CanTakeDamage.value ? 'true' : 'false'};\n`;
-            if (ov.UserCameraRotation.enabled) ovrStr += `\n        public override bool UserCameraRotation() => ${ov.UserCameraRotation.value ? 'true' : 'false'};\n`;
-            if (ov.GetResistance.enabled) ovrStr += `\n        public override float GetResistance() => ${ov.GetResistance.value}f;\n`;
-            if (ov.GetSpectatorBone.enabled && ov.GetSpectatorBone.value) ovrStr += `\n        public override string GetSpectatorBone() => "${ov.GetSpectatorBone.value}";\n`;
-            if (ov.GetPlayerInfo.enabled && ov.GetPlayerInfo.value) ovrStr += `\n        public override string GetPlayerInfo(HitBox b) => "${ov.GetPlayerInfo.value}";\n`;
-            if (ov.GetDeadInfo.enabled && ov.GetDeadInfo.value) ovrStr += `\n        public override string GetDeadInfo(DeadBox b) => "${ov.GetDeadInfo.value}";\n`;
+            el('fileNameDisplay').innerText = v.className + (currentLang === 'xlua' ? '.lua' : '.cs');
+            const rgb = hexToRgb(v.hexColor);
 
             let code = '';
             if (currentLang === 'csharp') {
-                code = `using System.Collections.Generic;\nusing UnityEngine;\nusing Akequ.Base;\nusing System.Linq;\n\nnamespace ${ns}\n{\n    public class ${cn} : PlayerClass\n    {\n        public override void Init()\n        {\n            player.InitHealth((uint)Config.GetInt("${hpKey}", ${hp}), new UnityEngine.Color(${rgb}, 1f), "${clean}");\n            player.SetHitbox(new Vector3(0.8f, 1.8f, 0.8f), Vector3.zero);\n            \n            if (player.isLocalPlayer)\n            {\n                player.PlayBellSound(1);\n                UIManager.SetMobileButtons(new List<string>() { "Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch" });\n                TransitionManager.ShowClass("#${hex.toUpperCase()}", "${dn}", "${desc}", "${cat}", "${icon}");\n            }\n            \n            playerModel = player.SpawnHumanoidModel("${model}");\n            playerModel.transform.localPosition = new Vector3(0f, -0.83f, 0f);\n            PlayerUtilities.SpawnHitboxes(player, playerModel);\n\n            if (player.isServer)\n            {\n                var points = player.GetSpawnPoints("${spawn}");\n                var point = points.ElementAt(Random.Range(0, points.Count));\n                player.Teleport(point.Key.position + new Vector3(0f, 1.25f, 0f), point.Value);\n\n${itemsStr}\n            }\n        }\n\n        public override void OnStop()\n        {\n            if (playerModel != null) { PlayerUtilities.SpawnRagdoll(player, playerModel); GameObject.Destroy(playerModel); }\n            else PlayerUtilities.SpawnRagdoll(player, "${model}_ragdoll");\n        }\n\n        public override string GetName() => "${clean}";\n        public override string GetTeamID() => "${team}";\n        public override string GetClassColor() => "${hex.toUpperCase()}";${ovrStr}\n    }\n}`;
+                code = generateCSharp(v, rgb);
             } else {
-                code = `local Vector3 = CS.UnityEngine.Vector3\nlocal TransitionManager = CS.TransitionManager\nlocal UIManager = CS.UIManager\nlocal PlayerUtilities = CS.PlayerUtilities\nlocal GameObject = CS.UnityEngine.GameObject\nlocal Color = CS.UnityEngine.Color\nlocal Random = CS.UnityEngine.Random\n\n---@class ${cn}:CS.Akequ.Base.PlayerClass\n${cn} = {}\n\nfunction ${cn}:Init()\n    self.main.player:InitHealth(${hp}, Color(${rgb}, 1), "${clean}")\n    self.main.player:SetHitbox(Vector3(0.8, 1.8, 0.8), Vector3.zero)\n    if self.main.player.isLocalPlayer then\n        self.main.player:PlayBellSound(1)\n        UIManager.SetMobileButtons({ "Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch" })\n        TransitionManager.ShowClass("#${hex}", "${dn}", "${desc}", "${cat}", "${icon}")\n    end\n    self.main.playerModel = self.main.player:SpawnHumanoidModel("${model}")\n    self.main.playerModel.transform.localPosition = Vector3(0, -0.83, 0)\n    PlayerUtilities.SpawnHitboxes(self.main.player, self.main.playerModel)\n\n    if self.main.player.isServer then\n        local points = self.main.player:GetSpawnPoints("${spawn}")\n        local keys = {}\n        for k in pairs(points.Keys) do table.insert(keys, k) end\n        local vals = {}\n        for v in pairs(points.Values) do table.insert(vals, v) end\n        local i = math.random(1, #keys)\n        self.main.player:Teleport(keys[i].position + Vector3(0, 1.25, 0), vals[i])\n${items.split('\n').map(i => i.trim().replace('player.GiveItem("', 'self.main.player:GiveItem("').replace('");', '")')).filter(i => i).map(i => '        ' + i).join('\n')}\n    end\nend\n\nfunction ${cn}:OnStop()\n    if self.main.playerModel ~= nil then\n        PlayerUtilities.SpawnRagdoll(self.main.player, self.main.playerModel)\n        GameObject.Destroy(self.main.playerModel)\n    else\n        PlayerUtilities.SpawnRagdoll(self.main.player, "${model}_ragdoll")\n    end\nend\n\nfunction ${cn}:GetName()\n    return "${clean}"\nend\nfunction ${cn}:GetTeamID()\n    return "${team}"\nend\nfunction ${cn}:GetClassColor()\n    return "${hex}"\nend\nreturn ${cn}`;
+                code = generateXLua(v, rgb);
             }
 
-            document.getElementById('codeOutput').value = code;
-            document.getElementById('fileName').textContent = cn + (currentLang === 'csharp' ? '.cs' : '.lua');
+            el('codeOutput').value = code;
         }
 
-        function copyCode() {
-            navigator.clipboard.writeText(document.getElementById('codeOutput').value);
-            const btn = document.getElementById('copyBtnText');
-            btn.textContent = 'Copied!';
-            setTimeout(() => btn.textContent = 'Copy', 2000);
+        function generateCSharp(v, rgb) {
+            const itemsCode = state.items.map(it => `                player.GiveItem("${it}");`).join('\n');
+            const voiceCode = state.voiceChats.length > 0 ?
+                `                PlayerUtilities.SetVoiceChat(${state.voiceChats.map(vc => `("${vc.channel}", ${vc.active ? 'true' : 'false'})`).join(', ')});` :
+                '';
+
+            let ovr = '';
+            const o = state.overrides;
+            if (o.OnOpenInventory.enabled) ovr += `\n        public override bool OnOpenInventory() => ${o.OnOpenInventory.value ? 'true' : 'false'};\n`;
+            if (o.CanMove.enabled) ovr += `\n        public override bool CanMove() => ${o.CanMove.value ? 'true' : 'false'};\n`;
+            if (o.CanInteract.enabled) ovr += `\n        public override bool CanInteract() => ${o.CanInteract.value ? 'true' : 'false'};\n`;
+            if (o.CanTakeDamage.enabled) ovr += `\n        public override bool CanTakeDamage() => ${o.CanTakeDamage.value ? 'true' : 'false'};\n`;
+            if (o.IgnoreSCP.enabled) ovr += `\n        public override bool IgnoreSCP() => ${o.IgnoreSCP.value ? 'true' : 'false'};\n`;
+            if (o.CheckpointPass.enabled) ovr += `\n        public override bool CheckpointPass() => ${o.CheckpointPass.value ? 'true' : 'false'};\n`;
+            if (o.UseCameraRotation.enabled) ovr += `\n        public override bool UseCameraRotation() => ${o.UseCameraRotation.value ? 'true' : 'false'};\n`;
+            if (o.GetPlayerInfo.enabled) ovr += `\n        public override string GetPlayerInfo(HitBox box) => "${o.GetPlayerInfo.value}";\n`;
+            if (o.GetDeadInfo.enabled) ovr += `\n        public override string GetDeadInfo(DeadBox box) => "${o.GetDeadInfo.value}";\n`;
+            if (o.GetResistance.enabled) ovr += `\n        public override float GetResistance() => ${o.GetResistance.value}f;\n`;
+            if (o.GetSpectatorBone.enabled) ovr += `\n        public override string GetSpectatorBone() => "${o.GetSpectatorBone.value}";\n`;
+
+            return `using System.Collections.Generic;
+        using System.Linq;
+        using Akequ.Base;
+        using UnityEngine;
+
+        namespace ${v.namespace}
+        {
+            public class ${v.className} : PlayerClass
+            {
+                public override void Init()
+                {
+                    player.InitHealth((uint)Config.GetInt("${v.configHpKey}", ${v.defaultHp}), new Color(${rgb.r}f, ${rgb.g}f, ${rgb.b}f, 1f), "${v.cleanName}");
+                    player.SetHitbox(new Vector3(0.8f, 1.8f, 0.8f), Vector3.zero);
+
+                    if (player.isLocalPlayer)
+                    {
+                        player.PlayBellSound(1);
+                        UIManager.SetMobileButtons(new List<string>() { "Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch" });
+                        TransitionManager.ShowClass("${v.hexColor.replace('#','').toUpperCase()}", "${v.displayName}", "${v.description}", "${v.category}", "${v.icon}");
+                        ${voiceCode}
+                    }
+
+                    playerModel = player.SpawnHumanoidModel("${v.model}");
+                    playerModel.transform.localPosition = new Vector3(0f, -0.83f, 0f);
+                    PlayerUtilities.SpawnHitboxes(player, playerModel);
+
+                    if (player.isServer)
+                    {
+                        var points = player.GetSpawnPoints("${v.spawnPoint}");
+                        var point = points.ElementAt(Random.Range(0, points.Count));
+                        player.Teleport(point.Key.position + new Vector3(0f, 1.25f, 0f), point.Value);
+        ${itemsCode}
+                    }
+                }
+
+                public override void OnStop()
+                {
+                    if (playerModel != null)
+                    {
+                        PlayerUtilities.SpawnRagdoll(player, playerModel);
+                        GameObject.Destroy(playerModel);
+                    }
+                    else
+                    {
+                        PlayerUtilities.SpawnRagdoll(player, "${v.model}_ragdoll");
+                    }
+                }
+
+                public override string GetName() => "${v.cleanName}";
+                public override string GetTeamID() => "${v.teamId}";
+                public override string GetClassColor() => "${v.hexColor.replace('#','').toUpperCase()}";${ovr}
+            }
+        }`;
         }
 
-        // Init
-        function init() {
-            renderOverrides();
-            renderItems();
-            
-            // Event listeners
-            ['namespace', 'className', 'displayName', 'configHpKey', 'defaultHp', 'category', 'icon', 'description', 'modelSelect', 'spawnSelect', 'teamSelect'].forEach(id => {
-                document.getElementById(id)?.addEventListener('input', generateCode);
-            });
-            
-            document.getElementById('hexColorPicker')?.addEventListener('input', (e) => {
-                document.getElementById('hexColorText').value = e.target.value;
-                generateCode();
-            });
-            document.getElementById('hexColorText')?.addEventListener('input', (e) => {
-                document.getElementById('hexColorPicker').value = e.target.value;
-                generateCode();
-            });
+        function generateXLua(v, rgb) {
+            const itemsCode = state.items.map(it => `        self.main.player:GiveItem("${it}")`).join('\n');
+            const voiceChannels = state.voiceChats.map(vc => `PlayerUtilities.CreateValueTuple("${vc.channel}", ${vc.active ? 'true' : 'false'})`).join(', ');
 
-            lucide.createIcons();
-            generateCode();
+            let overrides = '';
+            const o = state.overrides;
+            if (o.OnOpenInventory.enabled) overrides += `\nfunction ${v.className}:OnOpenInventory()\n    return ${o.OnOpenInventory.value ? 'true' : 'false'}\nend\n`;
+            if (o.CanMove.enabled) overrides += `\nfunction ${v.className}:CanMove()\n    return ${o.CanMove.value ? 'true' : 'false'}\nend\n`;
+            if (o.CanInteract.enabled) overrides += `\nfunction ${v.className}:CanInteract()\n    return ${o.CanInteract.value ? 'true' : 'false'}\nend\n`;
+            if (o.CanTakeDamage.enabled) overrides += `\nfunction ${v.className}:CanTakeDamage()\n    return ${o.CanTakeDamage.value ? 'true' : 'false'}\nend\n`;
+            if (o.IgnoreSCP.enabled) overrides += `\nfunction ${v.className}:IgnoreSCP()\n    return ${o.IgnoreSCP.value ? 'true' : 'false'}\nend\n`;
+            if (o.CheckpointPass.enabled) overrides += `\nfunction ${v.className}:CheckpointPass()\n    return ${o.CheckpointPass.value ? 'true' : 'false'}\nend\n`;
+            if (o.UseCameraRotation.enabled) overrides += `\nfunction ${v.className}:UseCameraRotation()\n    return ${o.UseCameraRotation.value ? 'true' : 'false'}\nend\n`;
+            if (o.GetPlayerInfo.enabled) overrides += `\nfunction ${v.className}:GetPlayerInfo(box)\n    return "${o.GetPlayerInfo.value}"\nend\n`;
+            if (o.GetDeadInfo.enabled) overrides += `\nfunction ${v.className}:GetDeadInfo(box)\n    return "${o.GetDeadInfo.value}"\nend\n`;
+            if (o.GetResistance.enabled) overrides += `\nfunction ${v.className}:GetResistance()\n    return ${o.GetResistance.value}\nend\n`;
+            if (o.GetSpectatorBone.enabled) overrides += `\nfunction ${v.className}:GetSpectatorBone()\n    return "${o.GetSpectatorBone.value}"\nend\n`;
+
+            return `local Vector3 = CS.UnityEngine.Vector3
+        local TransitionManager = CS.TransitionManager
+        local UIManager = CS.UIManager
+        local PlayerUtilities = CS.PlayerUtilities
+        local GameObject = CS.UnityEngine.GameObject
+        local Color = CS.UnityEngine.Color
+        local Random = CS.UnityEngine.Random
+
+        ---@class ${v.className}:CS.Akequ.Base.PlayerClass
+        ${v.className} = {}
+
+        function ${v.className}:Init()
+            self.main.player:InitHealth(CS.Config.GetInt("${v.configHpKey}", ${v.defaultHp}), Color(${rgb.r}, ${rgb.g}, ${rgb.b}, 1), "${v.cleanName}")
+            self.main.player:SetHitbox(Vector3(0.8, 1.8, 0.8), Vector3.zero)
+
+            if self.main.player.isLocalPlayer then
+                self.main.player:PlayBellSound(1)
+                UIManager.SetMobileButtons({"Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch"})
+                TransitionManager.ShowClass("${v.hexColor:upper()}", "${v.displayName}", "${v.description}", "${v.category}", "${v.icon}")
+                PlayerUtilities.SetVoiceChat(${voiceChannels})
+            end
+
+            self.main.playerModel = self.main.player:SpawnHumanoidModel("${v.model}")
+            self.main.playerModel.transform.localPosition = Vector3(0, -0.83, 0)
+            PlayerUtilities.SpawnHitboxes(self.main.player, self.main.playerModel)
+
+            if self.main.player.isServer then
+                local points = self.main.player:GetSpawnPoints("${v.spawnPoint}")
+                local keys = {}
+                local vals = {}
+                for k, v in pairs(points) do
+                    table.insert(keys, k)
+                    table.insert(vals, v)
+                end
+                local i = math.random(1, #keys)
+                self.main.player:Teleport(keys[i].position + Vector3(0, 1.25, 0), vals[i])
+        ${itemsCode}
+            end
+        end
+
+        function ${v.className}:OnStop()
+            if self.main.playerModel ~= nil then
+                local ragdoll = PlayerUtilities.SpawnRagdoll(self.main.player, self.main.playerModel)
+                GameObject.Destroy(self.main.playerModel)
+            else
+                local ragdoll = PlayerUtilities.SpawnRagdoll(self.main.player, "${v.model}_ragdoll")
+            end
+        end
+
+        function ${v.className}:GetName()
+            return "${v.cleanName}"
+        end
+
+        function ${v.className}:GetTeamID()
+            return "${v.teamId}"
+        end
+
+        function ${v.className}:GetClassColor()
+            return "${v.hexColor:gsub('#', ''):upper()}"
+        end
+        ${overrides}
+        return ${v.className}`;
         }
 
+        // ============ START ============
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
