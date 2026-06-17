@@ -3,559 +3,479 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Constructor</title>
-    <!-- Подключаем Tailwind CSS для стилей -->
+    <title>SCP:CS ~ Class Constructor</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Стили для кастомного скроллбара и скрытия маркера <details> в Safari/Chrome */
-        details > summary {
-            list-style: none;
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #7c3aed;
+            --accent-hover: #6d28d9;
+            --success: #238636;
+            --danger: #da3633;
+            --warning: #d2991d;
+            --radius: 8px;
+            --transition: 0.2s ease;
         }
-        details > summary::-webkit-details-marker {
-            display: none;
+
+        * {
+            box-sizing: border-box;
         }
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
-        ::-webkit-scrollbar-track {
-            background: #171717; 
+
+        /* Railway-inspired glass morphism */
+        .glass-panel {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all var(--transition);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #3f3f46; 
-            border-radius: 4px;
+
+        .glass-panel:hover {
+            border-color: rgba(124, 58, 237, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #52525b; 
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--bg-tertiary); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+        /* Smooth transitions */
+        .transition-smooth {
+            transition: all var(--transition);
+        }
+
+        /* Toggle switch */
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+        .toggle.active {
+            background: var(--accent);
+        }
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform var(--transition);
+        }
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .layout-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .code-panel {
+                height: 60vh !important;
+                position: relative !important;
+                top: 0 !important;
+            }
+        }
+        @media (max-width: 640px) {
+            body { padding: 8px; }
+            .config-grid { grid-template-columns: 1fr !important; }
         }
     </style>
 </head>
-<body class="bg-neutral-900 text-gray-200 font-sans min-h-screen p-4 md:p-8">
+<body class="min-h-screen p-3 md:p-6">
+    <div class="max-w-[1600px] mx-auto">
 
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
-        <!-- ЛЕВАЯ ПАНЕЛЬ: НАСТРОЙКИ -->
-        <div class="space-y-6">
-            <div class="flex items-center gap-3 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <h1 class="text-2xl font-bold text-white">Class Constructor</h1>
+        <!-- Header -->
+        <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+            <div class="flex items-center gap-3">
+                <i data-lucide="box" class="w-8 h-8 text-purple-500"></i>
+                <div>
+                    <h1 class="text-xl font-bold">SCP Class Constructor</h1>
+                    <p class="text-xs text-gray-500">C# / XLUA PlayerClass Generator</p>
+                </div>
             </div>
 
-            <!-- Основная информация -->
-            <details class="bg-neutral-800/50 rounded-lg border border-neutral-700 overflow-hidden" open>
-                <summary class="px-4 py-3 flex justify-between items-center bg-neutral-800 cursor-pointer select-none font-semibold text-white text-sm">
-                    Основная информация
-                    <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </summary>
-                <div class="p-4 grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Namespace</label>
-                        <input type="text" id="namespace" value="PluginExample" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none">
+            <!-- Language & Mode Toggle -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="text-gray-400">C#</span>
+                    <div class="toggle active" id="langToggle" onclick="toggleLanguage()"></div>
+                    <span class="text-gray-400">XLUA</span>
+                </div>
+                <span id="langBadge" class="text-xs px-2 py-1 rounded bg-purple-600/20 text-purple-400 border border-purple-600/30">C# MODE</span>
+            </div>
+        </header>
+
+        <!-- Main Grid -->
+        <div class="grid layout-grid gap-6" style="grid-template-columns: 1fr 1fr;">
+            
+            <!-- Left: Configuration -->
+            <div class="space-y-4">
+                
+                <!-- Basic Info -->
+                <div class="glass-panel p-4">
+                    <div class="flex items-center gap-2 mb-4" onclick="this.parentElement.querySelector('.panel-content').classList.toggle('hidden')">
+                        <i data-lucide="info" class="w-4 h-4 text-purple-400"></i>
+                        <h2 class="text-sm font-semibold">Основная информация</h2>
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-auto text-gray-500"></i>
                     </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Название Класса (в коде)</label>
-                        <input type="text" id="className" value="CustomClass" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Отображаемое Имя (с HTML)</label>
-                        <input type="text" id="displayName" value="<b>Уборщик</b>" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none">
-                    </div>
-                    <div class="flex gap-2">
-                        <div class="flex-1">
-                            <label class="block text-xs text-gray-400 mb-1">Ключ HP (Config)</label>
-                            <input type="text" id="configHpKey" value="janitor_health" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none">
+                    <div class="panel-content grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Namespace / Module</label>
+                            <input type="text" id="namespace" value="MyPlugin" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
                         </div>
-                        <div class="w-24">
-                            <label class="block text-xs text-gray-400 mb-1">HP (умолч.)</label>
-                            <input type="number" id="defaultHp" value="100" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none">
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">ClassName (Code)</label>
+                            <input type="text" id="className" value="CustomClass" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-xs text-gray-400 mb-1 block">Display Name (HTML allowed)</label>
+                            <input type="text" id="displayName" value="<b>Custom Role</b>" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
                         </div>
                     </div>
                 </div>
-            </details>
 
-            <!-- Отображение и Цвет -->
-            <details class="bg-neutral-800/50 rounded-lg border border-neutral-700 overflow-hidden" open>
-                <summary class="px-4 py-3 flex justify-between items-center bg-neutral-800 cursor-pointer select-none font-semibold text-white text-sm">
-                    Отображение (ShowClass) & Цвет
-                    <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </summary>
-                <div class="p-4">
-                    <div class="flex flex-col md:flex-row gap-4 mb-4">
-                        <div class="flex-1">
-                            <label class="block text-xs text-gray-400 mb-1">HEX Цвет</label>
-                            <div class="flex gap-2">
-                                <input type="color" id="hexColorPicker" value="#fb00ff" class="h-10 w-12 rounded border-none cursor-pointer bg-neutral-800 p-0">
-                                <input type="text" id="hexColorText" value="#fb00ff" class="flex-1 bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none uppercase">
+                <!-- Health & Color -->
+                <div class="glass-panel p-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="heart" class="w-4 h-4 text-red-400"></i>
+                        <h2 class="text-sm font-semibold">Здоровье & Цвет</h2>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Config Key</label>
+                            <input type="text" id="configHpKey" value="custom_health" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Default HP</label>
+                            <input type="number" id="defaultHp" value="100" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">HEX Color</label>
+                            <div class="flex gap-1">
+                                <input type="color" id="hexColorPicker" value="#7c3aed" class="w-10 h-10 rounded border-0 cursor-pointer bg-transparent">
+                                <input type="text" id="hexColorText" value="#7c3aed" class="flex-1 bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white uppercase">
                             </div>
                         </div>
-                        <div class="flex-1">
-                            <label class="block text-xs text-gray-400 mb-1">Категория</label>
-                            <input type="text" id="category" value="Administration" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none">
-                        </div>
-                        <div class="flex-1">
-                            <label class="block text-xs text-gray-400 mb-1">Иконка</label>
-                            <input type="text" id="icon" value="ScientistIcon" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none">
-                        </div>
-                    </div>
-                    <label class="block text-xs text-gray-400 mb-1">Описание (используйте \n для переноса)</label>
-                    <textarea id="description" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none min-h-[80px]">Убирайте комплекс.\nПомогайте ученым.</textarea>
-                </div>
-            </details>
-
-            <!-- Спавн, Модель и Команда -->
-            <details class="bg-neutral-800/50 rounded-lg border border-neutral-700 overflow-hidden" open>
-                <summary class="px-4 py-3 flex justify-between items-center bg-neutral-800 cursor-pointer select-none font-semibold text-white text-sm">
-                    Спавн, Модель и Команда
-                    <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </summary>
-                <div class="p-4 grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Модель Игрока</label>
-                        <select id="modelSelect" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none"></select>
-                    </div>
-                    <div class="flex flex-col justify-center mt-4">
-                        <span class="text-xs text-gray-500">Рэгдолл: <b id="ragdollPreview" class="text-purple-400 font-mono">ply_scientist_ragdoll</b></span>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Точка Спавна</label>
-                        <select id="spawnPointSelect" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none"></select>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Team ID</label>
-                        <select id="teamIdSelect" class="w-full bg-neutral-800 border border-neutral-700 rounded p-2 text-sm focus:border-purple-500 outline-none"></select>
                     </div>
                 </div>
-            </details>
 
-            <!-- Голосовой чат -->
-            <details class="bg-neutral-800/50 rounded-lg border border-neutral-700 overflow-hidden" open>
-                <summary class="px-4 py-3 flex justify-between items-center bg-neutral-800 cursor-pointer select-none font-semibold text-white text-sm">
-                    Голосовой чат (Voice Chat)
-                    <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </summary>
-                <div class="p-4 space-y-2">
-                    <div id="voiceChatList" class="space-y-2 mb-2"></div>
-                    <button id="addVoiceChatBtn" class="w-full flex items-center justify-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-sm p-2 rounded border border-dashed border-neutral-600 transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                        Добавить канал
+                <!-- Display Settings -->
+                <div class="glass-panel p-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="eye" class="w-4 h-4 text-blue-400"></i>
+                        <h2 class="text-sm font-semibold">Отображение</h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Category</label>
+                            <input type="text" id="category" value="Custom" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Icon</label>
+                            <input type="text" id="icon" value="SCPIcon" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-xs text-gray-400 mb-1 block">Description (\n for new line)</label>
+                            <textarea id="description" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white min-h-[60px]">Custom role description.\nSecond line.</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spawn & Model -->
+                <div class="glass-panel p-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="user" class="w-4 h-4 text-green-400"></i>
+                        <h2 class="text-sm font-semibold">Модель & Спавн</h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Player Model</label>
+                            <select id="modelSelect" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                                <option value="ply_scientist">ply_scientist</option>
+                                <option value="ply_classD">ply_classD</option>
+                                <option value="ply_guard">ply_guard</option>
+                                <option value="ply_mtf">ply_mtf</option>
+                                <option value="ply_chaosInsurgency">ply_chaosInsurgency</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Spawn Point</label>
+                            <select id="spawnSelect" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                                <option value="scientistSpawn">scientistSpawn</option>
+                                <option value="classDSpawn">classDSpawn</option>
+                                <option value="mtfSpawn">mtfSpawn</option>
+                                <option value="chaosSpawn">chaosSpawn</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Team ID</label>
+                            <select id="teamSelect" class="w-full bg-[#0d1117] border border-[#30363d] rounded-md p-2 text-sm focus:border-purple-500 outline-none text-white">
+                                <option value="MTF">MTF</option>
+                                <option value="ClassD">ClassD</option>
+                                <option value="SCP">SCP</option>
+                                <option value="Spectator">Spectator</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overrides -->
+                <div class="glass-panel p-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="settings-2" class="w-4 h-4 text-yellow-400"></i>
+                        <h2 class="text-sm font-semibold">Overrides</h2>
+                    </div>
+                    <div class="space-y-2" id="overridesContainer">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Inventory -->
+                <div class="glass-panel p-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="backpack" class="w-4 h-4 text-orange-400"></i>
+                        <h2 class="text-sm font-semibold">Инвентарь</h2>
+                    </div>
+                    <div id="itemsList" class="space-y-2 mb-3"></div>
+                    <button onclick="addItem()" class="w-full flex items-center justify-center gap-2 text-sm p-2 rounded border border-dashed border-[#30363d] hover:border-purple-500 transition-smooth">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Добавить предмет
                     </button>
                 </div>
-            </details>
+            </div>
 
-            <!-- Предметы -->
-            <details class="bg-neutral-800/50 rounded-lg border border-neutral-700 overflow-hidden" open>
-                <summary class="px-4 py-3 flex justify-between items-center bg-neutral-800 cursor-pointer select-none font-semibold text-white text-sm">
-                    Инвентарь (Предметы при спавне)
-                    <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </summary>
-                <div class="p-4 space-y-2">
-                    <div id="itemsList" class="space-y-2 mb-2"></div>
-                    <button id="addItemBtn" class="w-full flex items-center justify-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-sm p-2 rounded border border-dashed border-neutral-600 transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                        Добавить предмет
+            <!-- Right: Code Output -->
+            <div class="code-panel lg:sticky top-6 flex flex-col" style="height: calc(100vh - 3rem);">
+                <div class="flex items-center justify-between p-3 bg-[#161b22] border border-[#30363d] rounded-t-lg">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        <span id="fileName" class="text-sm">CustomClass.cs</span>
+                    </div>
+                    <button onclick="copyCode()" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-purple-600 hover:bg-purple-500 transition-smooth">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span id="copyBtnText">Copy</span>
                     </button>
                 </div>
-            </details>
-
-            <!-- Дополнительные функции (Overrides) -->
-            <details class="bg-neutral-800/50 rounded-lg border border-neutral-700 overflow-hidden">
-                <summary class="px-4 py-3 flex justify-between items-center bg-neutral-800 cursor-pointer select-none font-semibold text-white text-sm">
-                    Дополнительные функции (Overrides)
-                    <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </summary>
-                <div class="p-4 space-y-3" id="overridesContainer">
-                    <!-- Генерируется через JS -->
+                <div class="flex-1 bg-[#0d1117] border border-t-0 border-[#30363d] rounded-b-lg overflow-hidden">
+                    <textarea id="codeOutput" readonly class="w-full h-full bg-transparent p-4 font-mono text-xs md:text-sm resize-none text-gray-300 outline-none"></textarea>
                 </div>
-            </details>
-
-        </div>
-
-        <!-- ПРАВАЯ ПАНЕЛЬ: КОД -->
-        <div class="lg:sticky top-8 h-[calc(100vh-4rem)] flex flex-col">
-            <div class="flex items-center justify-between bg-neutral-800 rounded-t-lg border-b border-neutral-700 p-3">
-                <span class="text-sm font-semibold text-gray-300 flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
-                    <span id="fileNameDisplay">CustomClass.cs</span>
-                </span>
-                <button id="copyBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors bg-purple-600 hover:bg-purple-500 text-white">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    <span id="copyText">Копировать</span>
-                </button>
-            </div>
-            <div class="flex-1 bg-neutral-950 rounded-b-lg border border-t-0 border-neutral-800 overflow-hidden relative">
-                <textarea id="codeOutput" readonly class="absolute inset-0 w-full h-full bg-transparent text-gray-300 p-4 font-mono text-xs md:text-sm resize-none focus:outline-none whitespace-pre" spellcheck="false"></textarea>
             </div>
         </div>
-
     </div>
 
-<script>
-    // --- ДАННЫЕ И СПИСКИ ---
-    const MODELS = [
-        "ply_classD", "ply_guard", "ply_mtf", "ply_chaosInsurgency", "ply_scientist",
-        "ply_scp049", "ply_scp096", "ply_scp106", "ply_scp173", "ply_scp0492", "ply_scp939", "ply_scp999"
-    ];
+    <script>
+        // State
+        let currentLang = 'csharp';
+        let items = [];
+        let state = {
+            overrides: {
+                OnOpenInventory: { enabled: false, value: true, type: 'bool', label: 'OnOpenInventory' },
+                IgnoreSCP: { enabled: false, value: false, type: 'bool', label: 'IgnoreSCP' },
+                CheckpointPass: { enabled: false, value: false, type: 'bool', label: 'CheckpointPass' },
+                CanInteract: { enabled: true, value: true, type: 'bool', label: 'CanInteract' },
+                CanMove: { enabled: true, value: true, type: 'bool', label: 'CanMove' },
+                CanTakeDamage: { enabled: true, value: true, type: 'bool', label: 'CanTakeDamage' },
+                UserCameraRotation: { enabled: false, value: false, type: 'bool', label: 'UseCameraRotation' },
+                GetResistance: { enabled: false, value: 1.0, type: 'number', label: 'GetResistance' },
+                GetSpectatorBone: { enabled: false, value: '', type: 'text', label: 'GetSpectatorBone' },
+                GetPlayerInfo: { enabled: false, value: '', type: 'text', label: 'GetPlayerInfo' },
+                GetDeadInfo: { enabled: false, value: '', type: 'text', label: 'GetDeadInfo' }
+            }
+        };
 
-    const SPAWN_POINTS = [
-        "chaosSpawn", "mtfSpawn", "classDSpawn", "scientistSpawn", "guardSpawn",
-        "scp173Spawn", "scp096Spawn", "scp999Spawn", "scp049Spawn", "scp079Spawn", "scp939Spawn"
-    ];
+        // ITEMS
+        const ITEMS = ["Coin", "Cuffer", "Cup", "FirstAid", "FirstAid2", "FlashGrenade", "FragGrenade", 
+            "Flashlight", "Radio", "SCP035", "SCP420J", "SCP500", "AnalystCard", "AssistantCard", 
+            "BreakingCard", "ContainmentSpecialistCard", "EngineerCard", "FacilityDirectorCard", 
+            "FacilityManagerCard", "FoundationAgentCard", "GuardCard", "JanitorCard", "MTFCommanderCard",
+            "MTFOperativeCard", "O5Card", "RecruitCard", "ScientistCard", "SeniorEngineerCard",
+            "SeniorScientistCard", "ZoneManagerCard", "AK12", "ASVAL", "CZ75B", "FAL", "G36C", "G56",
+            "M170", "MicroHID", "SR3M", "USP", "VSS", "Ammo.A9x19", "Ammo.A45", "Ammo.A46x30", 
+            "Ammo.A545x39", "Ammo.A556x45", "Ammo.A762x39"];
 
-    const ITEMS = [
-        "Coin", "Cuffer", "Cup", "FirstAid", "FirstAid2", "FlashGrenade", "FragGrenade", "Flashlight", "Radio",
-        "SCP035", "SCP420J", "SCP500", "AnalystCard", "AssistantCard", "BreakingCard", "ContainmentSpecialistCard",
-        "EngineerCard", "FacilityDirectorCard", "FacilityManagerCard", "FoundationAgentCard", "GuardCard", "JanitorCard",
-        "MTFCommanderCard", "MTFOperativeCard", "O5Card", "RecruitCard", "ScientistCard", "SeniorEngineerCard",
-        "SeniorScientistCard", "ZoneManagerCard", "Ammo.A9x19", "Ammo.A45", "Ammo.A46x30", "Ammo.A545x39", "Ammo.A556x45",
-        "Ammo.A762x39", "AK12", "ASVAL", "CZ75B", "FAL", "G36C", "G56", "M170", "MicroHID", "SR3M", "USP", "VSS"
-    ];
-
-    const TEAMS = ["ClassD", "MTF", "SCP", "Spectator"];
-    const VOICE_CHANNELS = ["3D", "Intercom", "Spectator", "SCP"];
-
-    // --- СОСТОЯНИЕ ПРИЛОЖЕНИЯ ---
-    let state = {
-        items: [],
-        voiceChats: [{ channel: "3D", active: true }],
-        overrides: {
-            OnOpenInventory: { enabled: true, type: "bool", value: true, label: "OnOpenInventory (Может открыть инвентарь?)" },
-            CanMove: { enabled: false, type: "bool", value: true, label: "CanMove (Может ходить?)" },
-            CanInteract: { enabled: false, type: "bool", value: true, label: "CanInteract (Может взаимодействовать?)" },
-            IgnoreSCP: { enabled: false, type: "bool", value: false, label: "IgnoreSCP (Игнорирует механики SCP?)" },
-            CheckpointPass: { enabled: false, type: "bool", value: false, label: "CheckpointPass (Без карты чекпоинты?)" },
-            UserCameraRotation: { enabled: false, type: "bool", value: false, label: "UserCameraRotation (Вращение камеры?)" },
-            GetPlayerInfo: { enabled: false, type: "text", value: "Сотрудник клининга", label: "GetPlayerInfo (Текст при взгляде на игрока)" },
-            GetDeadInfo: { enabled: false, type: "text", value: "Мертвый уборщик", label: "GetDeadInfo (Текст при взгляде на труп)" },
-            GetResistance: { enabled: false, type: "number", value: 1.0, label: "GetResistance (Защита от урона, float)" }
+        function toggleLanguage() {
+            currentLang = currentLang === 'csharp' ? 'xlua' : 'csharp';
+            document.getElementById('langToggle').classList.toggle('active', currentLang === 'xlua');
+            document.getElementById('langBadge').textContent = currentLang === 'csharp' ? 'C# MODE' : 'XLUA MODE';
+            document.getElementById('langBadge').className = currentLang === 'csharp' 
+                ? 'text-xs px-2 py-1 rounded bg-purple-600/20 text-purple-400 border border-purple-600/30'
+                : 'text-xs px-2 py-1 rounded bg-green-600/20 text-green-400 border border-green-600/30';
+            document.getElementById('fileName').textContent = 
+                currentLang === 'csharp' ? (document.getElementById('className').value || 'CustomClass') + '.cs'
+                : (document.getElementById('className').value || 'CustomClass') + '.lua';
+            generateCode();
         }
-    };
 
-    // --- УТИЛИТЫ ---
-    const hexToRgb = (hex) => {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: (parseInt(result[1], 16) / 255).toFixed(3),
-            g: (parseInt(result[2], 16) / 255).toFixed(3),
-            b: (parseInt(result[3], 16) / 255).toFixed(3)
-        } : { r: 1, g: 1, b: 1 };
-    };
-
-    const stripHtmlTags = (str) => str.replace(/<\/?[^>]+(>|$)/g, "");
-
-    const el = id => document.getElementById(id);
-
-    // --- ИНИЦИАЛИЗАЦИЯ И РЕНДЕРИНГ ---
-    function init() {
-        populateSelect('modelSelect', MODELS, 'ply_scientist');
-        populateSelect('spawnPointSelect', SPAWN_POINTS, 'scientistSpawn');
-        populateSelect('teamIdSelect', TEAMS, 'ClassD');
-        
-        renderVoiceChats();
-        renderItems();
-        renderOverrides();
-        setupEventListeners();
-        
-        generateCode(); // Первый запуск
-    }
-
-    function populateSelect(id, options, defaultValue) {
-        const select = el(id);
-        select.innerHTML = options.map(opt => `<option value="${opt}" ${opt === defaultValue ? 'selected' : ''}>${opt}</option>`).join('');
-    }
-
-    function setupEventListeners() {
-        const inputs = ['namespace', 'className', 'displayName', 'configHpKey', 'defaultHp', 'category', 'icon', 'description', 'modelSelect', 'spawnPointSelect', 'teamIdSelect'];
-        
-        inputs.forEach(id => {
-            el(id).addEventListener('input', generateCode);
-        });
-
-        // Синхронизация цветов
-        el('hexColorPicker').addEventListener('input', (e) => {
-            el('hexColorText').value = e.target.value;
-            generateCode();
-        });
-        el('hexColorText').addEventListener('input', (e) => {
-            el('hexColorPicker').value = e.target.value;
-            generateCode();
-        });
-
-        // Модель -> обновить регдолл
-        el('modelSelect').addEventListener('change', (e) => {
-            el('ragdollPreview').innerText = e.target.value + "_ragdoll";
-        });
-
-        // Кнопки добавления
-        el('addVoiceChatBtn').addEventListener('click', () => {
-            state.voiceChats.push({ channel: "3D", active: true });
-            renderVoiceChats();
-            generateCode();
-        });
-
-        el('addItemBtn').addEventListener('click', () => {
-            state.items.push("Coin");
-            renderItems();
-            generateCode();
-        });
-
-        // Кнопка копирования
-        el('copyBtn').addEventListener('click', () => {
-            navigator.clipboard.writeText(el('codeOutput').value);
-            const btnText = el('copyText');
-            btnText.innerText = "Скопировано!";
-            el('copyBtn').classList.replace('bg-purple-600', 'bg-green-600');
-            el('copyBtn').classList.replace('hover:bg-purple-500', 'hover:bg-green-500');
-            setTimeout(() => {
-                btnText.innerText = "Копировать";
-                el('copyBtn').classList.replace('bg-green-600', 'bg-purple-600');
-                el('copyBtn').classList.replace('hover:bg-green-500', 'hover:bg-purple-500');
-            }, 2000);
-        });
-    }
-
-    // --- ДИНАМИЧЕСКИЕ ПАНЕЛИ ---
-    function renderVoiceChats() {
-        const container = el('voiceChatList');
-        container.innerHTML = '';
-        state.voiceChats.forEach((vc, index) => {
-            const div = document.createElement('div');
-            div.className = "flex items-center gap-2 bg-neutral-800 p-2 rounded border border-neutral-700";
-            
-            const select = document.createElement('select');
-            select.className = "bg-neutral-900 border border-neutral-600 rounded p-1.5 text-sm flex-1 text-white outline-none focus:border-purple-500";
-            select.innerHTML = VOICE_CHANNELS.map(c => `<option value="${c}" ${c === vc.channel ? 'selected' : ''}>${c}</option>`).join('');
-            select.addEventListener('change', (e) => { state.voiceChats[index].channel = e.target.value; generateCode(); });
-
-            const label = document.createElement('label');
-            label.className = "flex items-center gap-2 text-sm text-gray-300 cursor-pointer";
-            const checkbox = document.createElement('input');
-            checkbox.type = "checkbox";
-            checkbox.checked = vc.active;
-            checkbox.className = "rounded text-purple-500 bg-neutral-900 border-neutral-600 focus:ring-purple-500";
-            checkbox.addEventListener('change', (e) => { state.voiceChats[index].active = e.target.checked; generateCode(); });
-            
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(" Включен"));
-
-            const delBtn = document.createElement('button');
-            delBtn.className = "text-red-400 hover:text-red-300 p-1 ml-1";
-            delBtn.innerHTML = `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>`;
-            delBtn.addEventListener('click', () => { state.voiceChats.splice(index, 1); renderVoiceChats(); generateCode(); });
-
-            div.appendChild(select);
-            div.appendChild(label);
-            div.appendChild(delBtn);
-            container.appendChild(div);
-        });
-    }
-
-    function renderItems() {
-        const container = el('itemsList');
-        container.innerHTML = '';
-        state.items.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = "flex gap-2";
-            
-            const select = document.createElement('select');
-            select.className = "flex-1 bg-neutral-800 border border-neutral-700 rounded p-2 text-sm text-white outline-none focus:border-purple-500";
-            select.innerHTML = ITEMS.map(i => `<option value="${i}" ${i === item ? 'selected' : ''}>${i}</option>`).join('');
-            select.addEventListener('change', (e) => { state.items[index] = e.target.value; generateCode(); });
-
-            const delBtn = document.createElement('button');
-            delBtn.className = "bg-red-900/50 text-red-400 hover:bg-red-900 px-3 py-2 rounded border border-red-800/50 transition-colors flex items-center justify-center";
-            delBtn.innerHTML = `<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>`;
-            delBtn.addEventListener('click', () => { state.items.splice(index, 1); renderItems(); generateCode(); });
-
-            div.appendChild(select);
-            div.appendChild(delBtn);
-            container.appendChild(div);
-        });
-    }
-
-    function renderOverrides() {
-        const container = el('overridesContainer');
-        container.innerHTML = '';
-        Object.keys(state.overrides).forEach(key => {
-            const data = state.overrides[key];
-            const div = document.createElement('div');
-            div.className = "flex items-center justify-between p-2 rounded bg-neutral-900/50 border border-neutral-800 gap-4 flex-wrap md:flex-nowrap";
-            
-            const labelWrapper = document.createElement('label');
-            labelWrapper.className = "flex items-center gap-2 cursor-pointer select-none text-sm text-gray-300 min-w-max";
-            
-            const checkbox = document.createElement('input');
-            checkbox.type = "checkbox";
-            checkbox.checked = data.enabled;
-            checkbox.className = "rounded border-neutral-600 text-purple-500 bg-neutral-800";
-            
-            labelWrapper.appendChild(checkbox);
-            labelWrapper.appendChild(document.createTextNode(data.label));
-
-            div.appendChild(labelWrapper);
-
-            // Контейнер значения
-            const valContainer = document.createElement('div');
-            valContainer.className = "flex-1 flex justify-end min-w-[120px]";
-            
-            // Функция обновления вида инпута
-            const updateInputVisibility = () => {
-                valContainer.innerHTML = '';
-                if(data.enabled) {
-                    if(data.type === 'bool') {
+        function renderOverrides() {
+            const container = document.getElementById('overridesContainer');
+            container.innerHTML = '';
+            Object.entries(state.overrides).forEach(([key, data]) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-2 rounded bg-[#0d1117]/50 border border-[#21262d] gap-3';
+                div.innerHTML = `
+                    <label class="flex items-center gap-2 cursor-pointer text-sm min-w-max">
+                        <input type="checkbox" ${data.enabled ? 'checked' : ''} 
+                            onchange="state.overrides['${key}'].enabled = this.checked; renderOverrides(); generateCode()"
+                            class="rounded border-gray-600 text-purple-500 bg-transparent">
+                        ${data.label}
+                    </label>
+                    <div class="flex-1 flex justify-end" id="override-val-${key}"></div>
+                `;
+                container.appendChild(div);
+                
+                const valContainer = document.getElementById('override-val-' + key);
+                if (data.enabled) {
+                    if (data.type === 'bool') {
                         const sel = document.createElement('select');
-                        sel.className = "bg-neutral-800 border border-neutral-700 rounded p-1 text-xs outline-none text-white";
-                        sel.innerHTML = `<option value="true" ${data.value ? 'selected':''}>true</option><option value="false" ${!data.value ? 'selected':''}>false</option>`;
-                        sel.addEventListener('change', e => { data.value = e.target.value === 'true'; generateCode(); });
+                        sel.className = 'bg-[#0d1117] border border-[#30363d] rounded p-1 text-xs text-white';
+                        sel.innerHTML = `<option value="true" ${data.value ? 'selected' : ''}>true</option>
+                                         <option value="false" ${!data.value ? 'selected' : ''}>false</option>`;
+                        sel.onchange = (e) => { data.value = e.target.value === 'true'; generateCode(); };
                         valContainer.appendChild(sel);
                     } else {
                         const inp = document.createElement('input');
-                        inp.type = data.type;
-                        if(data.type === 'number') inp.step = "0.1";
+                        inp.type = data.type === 'number' ? 'number' : 'text';
+                        if (data.type === 'number') inp.step = '0.1';
                         inp.value = data.value;
-                        inp.className = "bg-neutral-800 border border-neutral-700 rounded p-1 px-2 text-xs outline-none w-full max-w-[150px] text-white";
-                        inp.addEventListener('input', e => { 
-                            data.value = data.type === 'number' ? (parseFloat(e.target.value) || 0) : e.target.value; 
-                            generateCode(); 
-                        });
+                        inp.className = 'bg-[#0d1117] border border-[#30363d] rounded p-1 px-2 text-xs text-white w-full max-w-[150px]';
+                        inp.oninput = (e) => { data.value = data.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value; generateCode(); };
                         valContainer.appendChild(inp);
                     }
                 }
-            };
+            });
+        }
+
+        function addItem() {
+            items.push('Coin');
+            renderItems();
+            generateCode();
+        }
+
+        function renderItems() {
+            const container = document.getElementById('itemsList');
+            container.innerHTML = '';
+            items.forEach((item, i) => {
+                const div = document.createElement('div');
+                div.className = 'flex gap-2';
+                const sel = document.createElement('select');
+                sel.className = 'flex-1 bg-[#0d1117] border border-[#30363d] rounded p-2 text-sm text-white';
+                sel.innerHTML = ITEMS.map(it => `<option value="${it}" ${it === item ? 'selected' : ''}>${it}</option>`).join('');
+                sel.onchange = (e) => { items[i] = e.target.value; generateCode(); };
+                const del = document.createElement('button');
+                del.className = 'text-red-400 hover:text-red-300 p-2';
+                del.innerHTML = '<i data-lucide="trash-2" class="w-4 h-4"></i>';
+                del.onclick = () => { items.splice(i, 1); renderItems(); generateCode(); };
+                div.appendChild(sel);
+                div.appendChild(del);
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        function hexToRgb(hex) {
+            const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return r ? `${(parseInt(r[1],16)/255).toFixed(3)}f, ${(parseInt(r[2],16)/255).toFixed(3)}f, ${(parseInt(r[3],16)/255).toFixed(3)}f` : '1f, 1f, 1f';
+        }
+
+        function stripHtml(s) { return s.replace(/<[^>]*>/g, ''); }
+
+        function generateCode() {
+            const ns = document.getElementById('namespace').value || 'MyPlugin';
+            const cn = document.getElementById('className').value || 'CustomClass';
+            const dn = document.getElementById('displayName').value || 'Custom Role';
+            const clean = stripHtml(dn);
+            const hpKey = document.getElementById('configHpKey').value || 'custom_health';
+            const hp = document.getElementById('defaultHp').value || 100;
+            const hex = (document.getElementById('hexColorText').value || '#7c3aed').replace('#', '');
+            const rgb = hexToRgb('#' + hex);
+            const cat = document.getElementById('category').value || 'Custom';
+            const icon = document.getElementById('icon').value || 'SCPIcon';
+            const desc = (document.getElementById('description').value || '').replace(/\n/g, '\\n');
+            const model = document.getElementById('modelSelect').value || 'ply_scientist';
+            const spawn = document.getElementById('spawnSelect').value || 'scientistSpawn';
+            const team = document.getElementById('teamSelect').value || 'MTF';
+
+            const itemsStr = items.map(i => `                player.GiveItem("${i}");`).join('\n');
             
-            updateInputVisibility();
+            let ovrStr = '';
+            const ov = state.overrides;
+            if (ov.OnOpenInventory.enabled) ovrStr += `\n        public override bool OnOpenInventory() => ${ov.OnOpenInventory.value ? 'true' : 'false'};\n`;
+            if (ov.IgnoreSCP.enabled) ovrStr += `\n        public override bool IgnoreSCP() => ${ov.IgnoreSCP.value ? 'true' : 'false'};\n`;
+            if (ov.CheckpointPass.enabled) ovrStr += `\n        public override bool CheckpointPass() => ${ov.CheckpointPass.value ? 'true' : 'false'};\n`;
+            if (ov.CanInteract.enabled) ovrStr += `\n        public override bool CanInteract() => ${ov.CanInteract.value ? 'true' : 'false'};\n`;
+            if (ov.CanMove.enabled) ovrStr += `\n        public override bool CanMove() => ${ov.CanMove.value ? 'true' : 'false'};\n`;
+            if (ov.CanTakeDamage.enabled) ovrStr += `\n        public override bool CanTakeDamage() => ${ov.CanTakeDamage.value ? 'true' : 'false'};\n`;
+            if (ov.UserCameraRotation.enabled) ovrStr += `\n        public override bool UserCameraRotation() => ${ov.UserCameraRotation.value ? 'true' : 'false'};\n`;
+            if (ov.GetResistance.enabled) ovrStr += `\n        public override float GetResistance() => ${ov.GetResistance.value}f;\n`;
+            if (ov.GetSpectatorBone.enabled && ov.GetSpectatorBone.value) ovrStr += `\n        public override string GetSpectatorBone() => "${ov.GetSpectatorBone.value}";\n`;
+            if (ov.GetPlayerInfo.enabled && ov.GetPlayerInfo.value) ovrStr += `\n        public override string GetPlayerInfo(HitBox b) => "${ov.GetPlayerInfo.value}";\n`;
+            if (ov.GetDeadInfo.enabled && ov.GetDeadInfo.value) ovrStr += `\n        public override string GetDeadInfo(DeadBox b) => "${ov.GetDeadInfo.value}";\n`;
+
+            let code = '';
+            if (currentLang === 'csharp') {
+                code = `using System.Collections.Generic;\nusing UnityEngine;\nusing Akequ.Base;\nusing System.Linq;\n\nnamespace ${ns}\n{\n    public class ${cn} : PlayerClass\n    {\n        public override void Init()\n        {\n            player.InitHealth((uint)Config.GetInt("${hpKey}", ${hp}), new UnityEngine.Color(${rgb}, 1f), "${clean}");\n            player.SetHitbox(new Vector3(0.8f, 1.8f, 0.8f), Vector3.zero);\n            \n            if (player.isLocalPlayer)\n            {\n                player.PlayBellSound(1);\n                UIManager.SetMobileButtons(new List<string>() { "Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch" });\n                TransitionManager.ShowClass("#${hex.toUpperCase()}", "${dn}", "${desc}", "${cat}", "${icon}");\n            }\n            \n            playerModel = player.SpawnHumanoidModel("${model}");\n            playerModel.transform.localPosition = new Vector3(0f, -0.83f, 0f);\n            PlayerUtilities.SpawnHitboxes(player, playerModel);\n\n            if (player.isServer)\n            {\n                var points = player.GetSpawnPoints("${spawn}");\n                var point = points.ElementAt(Random.Range(0, points.Count));\n                player.Teleport(point.Key.position + new Vector3(0f, 1.25f, 0f), point.Value);\n\n${itemsStr}\n            }\n        }\n\n        public override void OnStop()\n        {\n            if (playerModel != null) { PlayerUtilities.SpawnRagdoll(player, playerModel); GameObject.Destroy(playerModel); }\n            else PlayerUtilities.SpawnRagdoll(player, "${model}_ragdoll");\n        }\n\n        public override string GetName() => "${clean}";\n        public override string GetTeamID() => "${team}";\n        public override string GetClassColor() => "${hex.toUpperCase()}";${ovrStr}\n    }\n}`;
+            } else {
+                code = `local Vector3 = CS.UnityEngine.Vector3\nlocal TransitionManager = CS.TransitionManager\nlocal UIManager = CS.UIManager\nlocal PlayerUtilities = CS.PlayerUtilities\nlocal GameObject = CS.UnityEngine.GameObject\nlocal Color = CS.UnityEngine.Color\nlocal Random = CS.UnityEngine.Random\n\n---@class ${cn}:CS.Akequ.Base.PlayerClass\n${cn} = {}\n\nfunction ${cn}:Init()\n    self.main.player:InitHealth(${hp}, Color(${rgb}, 1), "${clean}")\n    self.main.player:SetHitbox(Vector3(0.8, 1.8, 0.8), Vector3.zero)\n    if self.main.player.isLocalPlayer then\n        self.main.player:PlayBellSound(1)\n        UIManager.SetMobileButtons({ "Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch" })\n        TransitionManager.ShowClass("#${hex}", "${dn}", "${desc}", "${cat}", "${icon}")\n    end\n    self.main.playerModel = self.main.player:SpawnHumanoidModel("${model}")\n    self.main.playerModel.transform.localPosition = Vector3(0, -0.83, 0)\n    PlayerUtilities.SpawnHitboxes(self.main.player, self.main.playerModel)\n\n    if self.main.player.isServer then\n        local points = self.main.player:GetSpawnPoints("${spawn}")\n        local keys = {}\n        for k in pairs(points.Keys) do table.insert(keys, k) end\n        local vals = {}\n        for v in pairs(points.Values) do table.insert(vals, v) end\n        local i = math.random(1, #keys)\n        self.main.player:Teleport(keys[i].position + Vector3(0, 1.25, 0), vals[i])\n${items.split('\n').map(i => i.trim().replace('player.GiveItem("', 'self.main.player:GiveItem("').replace('");', '")')).filter(i => i).map(i => '        ' + i).join('\n')}\n    end\nend\n\nfunction ${cn}:OnStop()\n    if self.main.playerModel ~= nil then\n        PlayerUtilities.SpawnRagdoll(self.main.player, self.main.playerModel)\n        GameObject.Destroy(self.main.playerModel)\n    else\n        PlayerUtilities.SpawnRagdoll(self.main.player, "${model}_ragdoll")\n    end\nend\n\nfunction ${cn}:GetName()\n    return "${clean}"\nend\nfunction ${cn}:GetTeamID()\n    return "${team}"\nend\nfunction ${cn}:GetClassColor()\n    return "${hex}"\nend\nreturn ${cn}`;
+            }
+
+            document.getElementById('codeOutput').value = code;
+            document.getElementById('fileName').textContent = cn + (currentLang === 'csharp' ? '.cs' : '.lua');
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText(document.getElementById('codeOutput').value);
+            const btn = document.getElementById('copyBtnText');
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        }
+
+        // Init
+        function init() {
+            renderOverrides();
+            renderItems();
             
-            checkbox.addEventListener('change', e => {
-                data.enabled = e.target.checked;
-                updateInputVisibility();
+            // Event listeners
+            ['namespace', 'className', 'displayName', 'configHpKey', 'defaultHp', 'category', 'icon', 'description', 'modelSelect', 'spawnSelect', 'teamSelect'].forEach(id => {
+                document.getElementById(id)?.addEventListener('input', generateCode);
+            });
+            
+            document.getElementById('hexColorPicker')?.addEventListener('input', (e) => {
+                document.getElementById('hexColorText').value = e.target.value;
+                generateCode();
+            });
+            document.getElementById('hexColorText')?.addEventListener('input', (e) => {
+                document.getElementById('hexColorPicker').value = e.target.value;
                 generateCode();
             });
 
-            div.appendChild(valContainer);
-            container.appendChild(div);
-        });
-    }
-
-    // --- ГЕНЕРАЦИЯ КОДА ---
-    function generateCode() {
-        // Сбор данных из DOM
-        const v = {
-            namespace: el('namespace').value || "PluginExample",
-            className: el('className').value || "CustomClass",
-            displayName: el('displayName').value, // с тегами для ShowClass
-            cleanName: stripHtmlTags(el('displayName').value), // без тегов для InitHealth
-            configHpKey: el('configHpKey').value,
-            defaultHp: el('defaultHp').value,
-            hexColor: el('hexColorText').value,
-            category: el('category').value,
-            description: el('description').value.replace(/\n/g, '\\n'), // экранирование переносов
-            icon: el('icon').value,
-            model: el('modelSelect').value,
-            spawnPoint: el('spawnPointSelect').value,
-            teamId: el('teamIdSelect').value
-        };
-
-        el('fileNameDisplay').innerText = v.className + ".cs";
-        const rgb = hexToRgb(v.hexColor);
-        
-        // Items
-        const itemsCode = state.items.map(item => `                player.GiveItem("${item}");`).join('\n');
-        
-        // Voice Chats
-        const voiceCode = state.voiceChats.length > 0 
-            ? `PlayerUtilities.SetVoiceChat(${state.voiceChats.map(vc => `("${vc.channel}", ${vc.active ? 'true' : 'false'})`).join(', ')});`
-            : "";
-
-        // Overrides
-        let ovrCode = "";
-        const ovr = state.overrides;
-        
-        if (ovr.OnOpenInventory.enabled) ovrCode += `\n        public override bool OnOpenInventory()\n        {\n            return ${ovr.OnOpenInventory.value ? 'true' : 'false'};\n        }\n`;
-        if (ovr.CanMove.enabled) ovrCode += `\n        public override bool CanMove()\n        {\n            return ${ovr.CanMove.value ? 'true' : 'false'};\n        }\n`;
-        if (ovr.UserCameraRotation.enabled) ovrCode += `\n        public override bool UserCameraRotation()\n        {\n            return ${ovr.UserCameraRotation.value ? 'true' : 'false'};\n        }\n`;
-        if (ovr.GetPlayerInfo.enabled) ovrCode += `\n        public override string GetPlayerInfo(HitBox box)\n        {\n            return "${ovr.GetPlayerInfo.value}";\n        }\n`;
-        if (ovr.GetDeadInfo.enabled) ovrCode += `\n        public override string GetDeadInfo(DeadBox box)\n        {\n            return "${ovr.GetDeadInfo.value}";\n        }\n`;
-        if (ovr.GetResistance.enabled) ovrCode += `\n        public override float GetResistance()\n        {\n            return ${ovr.GetResistance.value}f;\n        }\n`;
-        if (ovr.IgnoreSCP.enabled) ovrCode += `\n        public override bool IgnoreSCP()\n        {\n            return ${ovr.IgnoreSCP.value ? 'true' : 'false'};\n        }\n`;
-        if (ovr.CheckpointPass.enabled) ovrCode += `\n        public override bool CheckpointPass()\n        {\n            return ${ovr.CheckpointPass.value ? 'true' : 'false'};\n        }\n`;
-        if (ovr.CanInteract.enabled) ovrCode += `\n        public override bool CanInteract()\n        {\n            return ${ovr.CanInteract.value ? 'true' : 'false'};\n        }\n`;
-
-        const finalCode = `using System.Collections.Generic;
-using UnityEngine;
-using Akequ.Base;
-using System.Linq;
-
-namespace ${v.namespace}
-{
-    public class ${v.className} : PlayerClass
-    {
-        public override void Init()
-        {
-            player.InitHealth((uint)Config.GetInt("${v.configHpKey}", ${v.defaultHp}), new UnityEngine.Color(${rgb.r}f, ${rgb.g}f, ${rgb.b}f, 1f), "${v.cleanName}");
-            player.SetHitbox(new Vector3(0.8f, 1.8f, 0.8f), Vector3.zero);
-            
-            if (player.isLocalPlayer)
-            {
-                player.PlayBellSound(1);
-                UIManager.SetMobileButtons(new List<string>() { "Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch" });
-                
-                TransitionManager.ShowClass("${v.hexColor.toUpperCase()}", "${v.displayName}", "${v.description}", "${v.category}", "${v.icon}");
-                
-                ${voiceCode}
-            }
-            
-            playerModel = player.SpawnHumanoidModel("${v.model}");
-            playerModel.transform.localPosition = new Vector3(0f, -0.83f, 0f);
-            PlayerUtilities.SpawnHitboxes(player, playerModel);
-
-            if (player.isServer)
-            {
-                var points = player.GetSpawnPoints("${v.spawnPoint}");
-                var point = points.ElementAt(Random.Range(0, points.Count));
-                player.Teleport(point.Key.position + new Vector3(0f, 1.25f, 0f), point.Value);
-
-${itemsCode}
-            }
+            lucide.createIcons();
+            generateCode();
         }
 
-        public override void OnStop()
-        {
-            if (playerModel != null)
-            {
-                PlayerUtilities.SpawnRagdoll(player, playerModel);
-                GameObject.Destroy(playerModel);
-            }
-            else
-            {
-                PlayerUtilities.SpawnRagdoll(player, "${v.model}_ragdoll");
-            }
-        }
-
-        public override string GetName()
-        {
-            return "${v.cleanName}";
-        }
-
-        public override string GetTeamID()
-        {
-            return "${v.teamId}";
-        }
-
-        public override string GetClassColor()
-        {
-            return "${v.hexColor.replace('#', '').toUpperCase()}";
-        }
-${ovrCode}
-    }
-}`;
-        el('codeOutput').value = finalCode;
-    }
-
-    // Запуск приложения
-    document.addEventListener("DOMContentLoaded", init);
-
-</script>
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
