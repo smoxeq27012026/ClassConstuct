@@ -3,39 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCP:CS Class Constructor</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        'bg-primary': '#0d1117',
-                        'bg-secondary': '#161b22',
-                        'bg-tertiary': '#21262d',
-                        'border-primary': '#30363d',
-                        'text-primary': '#c9d1d9',
-                        'text-secondary': '#8b949e',
-                        'accent-blue': '#58a6ff',
-                        'accent-green': '#3fb950',
-                        'accent-purple': '#bc8cff',
-                        'accent-orange': '#d2991d',
-                    }
-                }
-            }
-        }
+    <title>SCP Class Constructor</title>
+    <script src="https://cdn.tailwindcss.com">
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.344.0/font/lucide.min.css">
     <style>
         :root {
             --bg-primary: #0d1117;
             --bg-secondary: #161b22;
             --bg-tertiary: #21262d;
             --border: #30363d;
-            --text: #c9d1d9;
+            --text-primary: #c9d1d9;
             --text-secondary: #8b949e;
-            --accent: #58a6ff;
+            --accent: #7c3aed;
+            --accent-hover: #6d28d9;
+            --success: #238636;
+            --danger: #da3633;
+            --warning: #d2991d;
         }
 
         * {
@@ -58,323 +42,284 @@
             background: #484f58;
         }
 
-        details > summary {
-            list-style: none;
-        }
-        details > summary::-webkit-details-marker,
-        details > summary::marker {
-            display: none;
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
         }
 
-        .sidebar-card {
+        .card {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            transition: border-color 0.2s;
+            border-radius: 12px;
+            transition: all 0.2s ease;
         }
-        .sidebar-card:hover {
+        .card:hover {
             border-color: #484f58;
         }
 
         .input-field {
             background: var(--bg-primary);
             border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 6px;
-            padding: 8px 12px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            width: 100%;
+            border-radius: 8px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
         }
         .input-field:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+            outline: none;
         }
 
         .btn-primary {
-            background: #238636;
-            border: 1px solid #2ea043;
+            background: var(--accent);
             color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
         .btn-primary:hover {
-            background: #2ea043;
+            background: var(--accent-hover);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
         }
         .btn-secondary:hover {
             background: #30363d;
         }
 
-        .toggle-lang {
-            display: flex;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .toggle-lang button {
-            padding: 6px 16px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            color: var(--text-secondary);
-            background: transparent;
-        }
-        .toggle-lang button.active {
-            background: #1f6feb;
+        .tab-active {
+            background: var(--bg-tertiary);
+            border-bottom: 2px solid var(--accent);
             color: white;
         }
 
-        .code-area {
-            background: #0d1117;
-            border: 1px solid var(--border);
-            border-radius: 0 0 8px 8px;
-            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-            font-size: 13px;
-            line-height: 1.6;
-            color: #c9d1d9;
-            resize: none;
+        .gradient-text {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .remove-btn {
-            background: transparent;
-            border: 1px solid #f8514966;
-            color: #f85149;
-            border-radius: 6px;
-            padding: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
         }
-        .remove-btn:hover {
-            background: #f8514920;
-            border-color: #f85149;
+        .pulse {
+            animation: pulse 2s infinite;
         }
     </style>
 </head>
-<body class="bg-[#0d1117] text-[#c9d1d9] min-h-screen font-sans">
-    <div class="max-w-[1600px] mx-auto p-4 md:p-6 lg:p-8">
-        
+<body class="min-h-screen">
+    <div class="max-w-[1600px] mx-auto p-4 md:p-8">
         <!-- Header -->
-        <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#30363d]">
-            <div class="flex items-center gap-3">
-                <i data-lucide="package" class="w-8 h-8 text-[#bc8cff]"></i>
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-600/20 flex items-center justify-center">
+                    <i class="lucide lucide-code-2 text-purple-400" style="font-size: 1.5rem;"></i>
+                </div>
                 <div>
-                    <h1 class="text-xl font-semibold text-white">Class Constructor</h1>
-                    <p class="text-xs text-[#8b949e]">SCP: Classified Site • Генератор классов</p>
+                    <h1 class="text-2xl font-bold text-white">SCP Class Constructor</h1>
+                    <p class="text-sm text-gray-400">Генератор классов для SCP: Classified Site</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
-                <div class="toggle-lang" id="langToggle">
-                    <button data-lang="csharp" class="active">C#</button>
-                    <button data-lang="xlua">XLUA</button>
-                </div>
-                <button class="btn-secondary" id="resetBtn">
-                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Сброс
+            <div class="flex gap-2">
+                <button id="exportBtn" class="btn-secondary px-4 py-2 flex items-center gap-2 text-sm">
+                    <i class="lucide lucide-download"></i> Экспорт
+                </button>
+                <button id="copyBtn" class="btn-primary px-4 py-2 flex items-center gap-2 text-sm">
+                    <i class="lucide lucide-copy"></i> <span id="copyText">Копировать</span>
                 </button>
             </div>
-        </header>
+        </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            
-            <!-- LEFT PANEL -->
-            <div class="space-y-4 overflow-y-auto max-h-[calc(100vh-160px)] pr-2">
-                
-                <!-- Основная информация -->
-                <details class="sidebar-card" open>
-                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="info" class="w-4 h-4 text-[#58a6ff]"></i>
-                            Основная информация
-                        </div>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
-                    </summary>
-                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Namespace</label>
-                            <input type="text" id="namespace" value="PluginExample" class="input-field">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Название класса (в коде)</label>
-                            <input type="text" id="className" value="CustomClass" class="input-field">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Отображаемое имя</label>
-                            <input type="text" id="displayName" value="<b>Уборщик</b>" class="input-field">
-                        </div>
-                        <div class="flex gap-2">
-                            <div class="flex-1">
-                                <label class="block text-xs text-[#8b949e] mb-1.5">Ключ HP</label>
-                                <input type="text" id="configHpKey" value="janitor_health" class="input-field">
-                            </div>
-                            <div class="w-20">
-                                <label class="block text-xs text-[#8b949e] mb-1.5">HP</label>
-                                <input type="number" id="defaultHp" value="100" class="input-field">
-                            </div>
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left Panel: Settings -->
+            <div class="lg:col-span-5 space-y-4">
+                <!-- Language Toggle -->
+                <div class="card p-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm text-gray-400">Язык:</span>
+                        <div class="flex bg-[#0d1117] rounded-lg p-1">
+                            <button id="csharpTab" class="px-4 py-2 rounded-md text-sm font-medium tab-active transition-all">
+                                C# (.NET)
+                            </button>
+                            <button id="xluaTab" class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 hover:text-white transition-all">
+                                XLUA
+                            </button>
                         </div>
                     </div>
-                </details>
+                </div>
 
-                <!-- Отображение и Цвет -->
-                <details class="sidebar-card" open>
-                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="palette" class="w-4 h-4 text-[#d2991d]"></i>
-                            Отображение и Цвет
+                <!-- Basic Info -->
+                <div class="card">
+                    <div class="p-4 border-b border-[#30363d] flex items-center gap-2">
+                        <i class="lucide lucide-info text-purple-400"></i>
+                        <h3 class="font-semibold text-white">Основная информация</h3>
+                    </div>
+                    <div class="p-4 grid grid-cols-2 gap-4">
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="block text-xs text-gray-400 mb-1.5">Namespace (C#) / Имя таблицы (XLUA)</label>
+                            <input type="text" id="namespace" value="PluginExample" class="input-field w-full p-2.5">
                         </div>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
-                    </summary>
-                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="block text-xs text-gray-400 mb-1.5">Название класса</label>
+                            <input type="text" id="className" value="CustomClass" class="input-field w-full p-2.5">
+                        </div>
                         <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">HEX Цвет</label>
-                            <div class="flex gap-2">
-                                <input type="color" id="hexColorPicker" value="#fb00ff" class="h-10 w-10 rounded border-none cursor-pointer bg-transparent p-0">
-                                <input type="text" id="hexColorText" value="#fb00ff" class="input-field uppercase flex-1">
+                            <label class="block text-xs text-gray-400 mb-1.5">Отображаемое имя</label>
+                            <input type="text" id="displayName" value="<b>Уборщик</b>" class="input-field w-full p-2.5">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1.5">Team ID</label>
+                            <select id="teamIdSelect" class="input-field w-full p-2.5"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1.5">Config ключ HP</label>
+                            <input type="text" id="configHpKey" value="janitor_health" class="input-field w-full p-2.5">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1.5">HP по умолчанию</label>
+                            <input type="number" id="defaultHp" value="100" class="input-field w-full p-2.5">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display & Color -->
+                <div class="card">
+                    <div class="p-4 border-b border-[#30363d] flex items-center gap-2">
+                        <i class="lucide lucide-palette text-purple-400"></i>
+                        <h3 class="font-semibold text-white">Отображение и цвет</h3>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1.5">HEX Цвет</label>
+                                <div class="flex gap-2">
+                                    <input type="color" id="hexColorPicker" value="#fb00ff" class="w-12 h-10 rounded border-none cursor-pointer bg-transparent">
+                                    <input type="text" id="hexColorText" value="#fb00ff" class="input-field flex-1 p-2.5 uppercase">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1.5">Категория</label>
+                                <input type="text" id="category" value="Administration" class="input-field w-full p-2.5">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1.5">Иконка</label>
+                                <input type="text" id="icon" value="ScientistIcon" class="input-field w-full p-2.5">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1.5">Модель игрока</label>
+                                <select id="modelSelect" class="input-field w-full p-2.5"></select>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Категория</label>
-                            <input type="text" id="category" value="Administration" class="input-field">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Иконка</label>
-                            <input type="text" id="icon" value="ScientistIcon" class="input-field">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Описание (\\n для переноса)</label>
-                            <textarea id="description" class="input-field min-h-[70px]" rows="2">Убирайте комплекс.\nПомогайте ученым.</textarea>
+                            <label class="block text-xs text-gray-400 mb-1.5">Описание (\\n для переноса)</label>
+                            <textarea id="description" rows="3" class="input-field w-full p-2.5 resize-none">Убирайте комплекс.\nПомогайте ученым.</textarea>
                         </div>
                     </div>
-                </details>
+                </div>
 
-                <!-- Спавн, Модель и Команда -->
-                <details class="sidebar-card" open>
-                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="user-plus" class="w-4 h-4 text-[#3fb950]"></i>
-                            Спавн, Модель и Команда
-                        </div>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
-                    </summary>
-                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Spawn & Model -->
+                <div class="card">
+                    <div class="p-4 border-b border-[#30363d] flex items-center gap-2">
+                        <i class="lucide lucide-map-pin text-purple-400"></i>
+                        <h3 class="font-semibold text-white">Спавн и модель</h3>
+                    </div>
+                    <div class="p-4 grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Модель</label>
-                            <select id="modelSelect" class="input-field"></select>
+                            <label class="block text-xs text-gray-400 mb-1.5">Точка спавна</label>
+                            <select id="spawnPointSelect" class="input-field w-full p-2.5"></select>
                         </div>
-                        <div class="flex items-end">
-                            <span class="text-xs text-[#8b949e]">Рэгдолл: <b id="ragdollPreview" class="text-[#bc8cff] font-mono">ply_scientist_ragdoll</b></span>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Точка спавна</label>
-                            <select id="spawnPointSelect" class="input-field"></select>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-[#8b949e] mb-1.5">Team ID</label>
-                            <select id="teamIdSelect" class="input-field"></select>
+                        <div class="flex flex-col justify-end">
+                            <span class="text-xs text-gray-500">Рэгдолл: <b id="ragdollPreview" class="text-purple-400 font-mono">ply_scientist_ragdoll</b></span>
                         </div>
                     </div>
-                </details>
+                </div>
 
-                <!-- Голосовой чат -->
-                <details class="sidebar-card" open>
-                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
+                <!-- Voice Chat -->
+                <div class="card">
+                    <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <i data-lucide="mic" class="w-4 h-4 text-[#58a6ff]"></i>
-                            Голосовой чат
+                            <i class="lucide lucide-mic text-purple-400"></i>
+                            <h3 class="font-semibold text-white">Голосовой чат</h3>
                         </div>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
-                    </summary>
-                    <div class="p-4 space-y-2">
-                        <div id="voiceChatList" class="space-y-2"></div>
-                        <button id="addVoiceChatBtn" class="btn-secondary w-full justify-center text-xs py-2">
-                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Добавить канал
+                        <button id="addVoiceChatBtn" class="btn-secondary p-2 rounded-lg hover:bg-[#30363d]">
+                            <i class="lucide lucide-plus"></i>
                         </button>
                     </div>
-                </details>
+                    <div id="voiceChatList" class="p-4 space-y-2"></div>
+                </div>
 
-                <!-- Инвентарь -->
-                <details class="sidebar-card" open>
-                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
+                <!-- Items -->
+                <div class="card">
+                    <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <i data-lucide="backpack" class="w-4 h-4 text-[#d2991d]"></i>
-                            Инвентарь
+                            <i class="lucide lucide-backpack text-purple-400"></i>
+                            <h3 class="font-semibold text-white">Инвентарь</h3>
                         </div>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
-                    </summary>
-                    <div class="p-4 space-y-2">
-                        <div id="itemsList" class="space-y-2"></div>
-                        <button id="addItemBtn" class="btn-secondary w-full justify-center text-xs py-2">
-                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Добавить предмет
+                        <button id="addItemBtn" class="btn-secondary p-2 rounded-lg hover:bg-[#30363d]">
+                            <i class="lucide lucide-plus"></i>
                         </button>
                     </div>
-                </details>
+                    <div id="itemsList" class="p-4 space-y-2"></div>
+                </div>
 
                 <!-- Overrides -->
-                <details class="sidebar-card">
-                    <summary class="px-4 py-3 flex justify-between items-center cursor-pointer select-none font-medium text-sm text-white border-b border-[#30363d]">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="settings-2" class="w-4 h-4 text-[#bc8cff]"></i>
-                            Overrides
-                        </div>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-[#8b949e] transition-transform details-chevron"></i>
-                    </summary>
-                    <div class="p-4 space-y-3" id="overridesContainer"></div>
-                </details>
+                <div class="card">
+                    <div class="p-4 border-b border-[#30363d] flex items-center gap-2">
+                        <i class="lucide lucide-sliders text-purple-400"></i>
+                        <h3 class="font-semibold text-white">Дополнительные функции</h3>
+                    </div>
+                    <div id="overridesContainer" class="p-4 space-y-3"></div>
+                </div>
             </div>
 
-            <!-- RIGHT PANEL -->
-            <div class="xl:sticky top-6 flex flex-col" style="height: calc(100vh - 140px);">
-                <div class="flex items-center justify-between bg-[#161b22] rounded-t-lg border border-b-0 border-[#30363d] p-3">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#3fb950]"></span>
-                        <span id="fileNameDisplay" class="text-sm font-mono text-[#c9d1d9]">CustomClass.cs</span>
+            <!-- Right Panel: Code Preview -->
+            <div class="lg:col-span-7 lg:sticky top-8 h-[calc(100vh-4rem)]">
+                <div class="card h-full flex flex-col">
+                    <div class="p-4 border-b border-[#30363d] flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="w-3 h-3 rounded-full bg-green-500 pulse"></span>
+                            <span id="fileNameDisplay" class="text-sm font-mono text-gray-300">CustomClass.cs</span>
+                        </div>
+                        <span id="langBadge" class="text-xs px-2 py-1 rounded-full bg-purple-600/20 text-purple-400">C#</span>
                     </div>
-                    <button id="copyBtn" class="btn-primary text-xs py-1.5 px-3">
-                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                        <span id="copyText">Копировать</span>
-                    </button>
-                </div>
-                <div class="flex-1 relative">
-                    <textarea id="codeOutput" readonly class="code-area absolute inset-0 w-full h-full p-4" spellcheck="false"></textarea>
+                    <div class="flex-1 relative">
+                        <textarea id="codeOutput" readonly class="absolute inset-0 w-full h-full bg-[#0d1117] text-gray-300 p-4 font-mono text-xs md:text-sm resize-none focus:outline-none"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ============ DATA ============
+        // --- DATA ---
         const MODELS = [
             "ply_classD", "ply_guard", "ply_mtf", "ply_chaosInsurgency", "ply_scientist",
             "ply_scp049", "ply_scp096", "ply_scp106", "ply_scp173", "ply_scp0492", "ply_scp939", "ply_scp999"
         ];
+
         const SPAWN_POINTS = [
             "chaosSpawn", "mtfSpawn", "classDSpawn", "scientistSpawn", "guardSpawn",
             "scp173Spawn", "scp096Spawn", "scp999Spawn", "scp049Spawn", "scp079Spawn", "scp939Spawn"
         ];
+
         const ITEMS = [
             "Coin", "Cuffer", "Cup", "FirstAid", "FirstAid2", "FlashGrenade", "FragGrenade", "Flashlight", "Radio",
             "SCP035", "SCP420J", "SCP500", "AnalystCard", "AssistantCard", "BreakingCard", "ContainmentSpecialistCard",
@@ -383,30 +328,41 @@
             "SeniorScientistCard", "ZoneManagerCard", "Ammo.A9x19", "Ammo.A45", "Ammo.A46x30", "Ammo.A545x39", "Ammo.A556x45",
             "Ammo.A762x39", "AK12", "ASVAL", "CZ75B", "FAL", "G36C", "G56", "M170", "MicroHID", "SR3M", "USP", "VSS"
         ];
+
         const TEAMS = ["ClassD", "MTF", "SCP", "Spectator", "None"];
         const VOICE_CHANNELS = ["3D", "Intercom", "Spectator", "SCP"];
 
-        // ============ STATE ============
-        let currentLang = 'csharp';
+        // --- STATE ---
         let state = {
+            language: 'csharp', // 'csharp' or 'xlua'
             items: [],
             voiceChats: [{ channel: "3D", active: true }],
             overrides: {
-                OnOpenInventory: { enabled: true, type: "bool", value: true, label: "OnOpenInventory" },
-                CanMove: { enabled: false, type: "bool", value: true, label: "CanMove" },
-                CanInteract: { enabled: false, type: "bool", value: true, label: "CanInteract" },
-                CanTakeDamage: { enabled: false, type: "bool", value: true, label: "CanTakeDamage" },
-                IgnoreSCP: { enabled: false, type: "bool", value: false, label: "IgnoreSCP" },
-                CheckpointPass: { enabled: false, type: "bool", value: false, label: "CheckpointPass" },
-                UseCameraRotation: { enabled: false, type: "bool", value: false, label: "UserCameraRotation" },
-                GetPlayerInfo: { enabled: false, type: "text", value: "Сотрудник клининга", label: "GetPlayerInfo" },
-                GetDeadInfo: { enabled: false, type: "text", value: "Мертвый уборщик", label: "GetDeadInfo" },
-                GetResistance: { enabled: false, type: "number", value: 1.0, label: "GetResistance (float)" },
-                GetSpectatorBone: { enabled: false, type: "text", value: "DeathCam", label: "GetSpectatorBone" }
+                OnOpenInventory: { enabled: true, type: "bool", value: true,
+                label: "OnOpenInventory (Может открыть инвентарь?)" },
+                CanMove: { enabled: false, type: "bool", value: true, label: "CanMove (Может ходить?)" },
+                CanInteract: { enabled: false, type: "bool", value: true,
+                label: "CanInteract (Может взаимодействовать?)" },
+                IgnoreSCP: { enabled: false, type: "bool", value: false,
+                label: "IgnoreSCP (Игнорирует механики SCP?)" },
+                CheckpointPass: { enabled: false, type: "bool", value: false,
+                label: "CheckpointPass (Без карты чекпоинты?)" },
+                CanTakeDamage: { enabled: false, type: "bool", value: true,
+                label: "CanTakeDamage (Может получать урон?)" },
+                UseCameraRotation: { enabled: false, type: "bool", value: false,
+                label: "UseCameraRotation (Вращение камеры?)" },
+                GetPlayerInfo: { enabled: false, type: "text", value: "Сотрудник клининга",
+                    label: "GetPlayerInfo (Текст при взгляде на игрока)" },
+                GetDeadInfo: { enabled: false, type: "text", value: "Мертвый уборщик",
+                label: "GetDeadInfo (Текст при взгляде на труп)" },
+                GetResistance: { enabled: false, type: "number", value: 1.0,
+                label: "GetResistance (Защита от урона, float)" },
+                GetSpectatorBone: { enabled: false, type: "text", value: "DeathCam",
+                label: "GetSpectatorBone (Кость для камеры наблюдателя)" },
             }
         };
 
-        // ============ UTILS ============
+        // --- UTILS ---
         const el = id => document.getElementById(id);
         const hexToRgb = (hex) => {
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -416,9 +372,9 @@
                 b: (parseInt(result[3], 16) / 255).toFixed(3)
             } : { r: 1, g: 1, b: 1 };
         };
-        const stripHtml = str => str.replace(/<\/?[^>]+(>|$)/g, "");
+        const stripHtmlTags = str => str.replace(/<\/?[^>]+(>|$)/g, "");
 
-        // ============ INIT ============
+        // --- INIT ---
         function init() {
             populateSelect('modelSelect', MODELS, 'ply_scientist');
             populateSelect('spawnPointSelect', SPAWN_POINTS, 'scientistSpawn');
@@ -427,207 +383,273 @@
             renderVoiceChats();
             renderItems();
             renderOverrides();
-            setupListeners();
-            lucide.createIcons();
+            setupEventListeners();
             generateCode();
+
+            // Set initial tab
+            updateTabStyles();
         }
 
-        function populateSelect(id, options, def) {
-            const s = el(id);
-            s.innerHTML = options.map(o => `<option value="${o}" ${o === def ? 'selected' : ''}>${o}</option>`).join('');
+        function populateSelect(id, options, defaultValue) {
+            const select = el(id);
+            select.innerHTML = options.map(opt =>
+                `<option value="${opt}" ${opt === defaultValue ? 'selected' : ''}>${opt}</option>`
+            ).join('');
         }
 
-        // ============ LISTENERS ============
-        function setupListeners() {
-            const inputs = ['namespace', 'className', 'displayName', 'configHpKey', 'defaultHp',
-                'category', 'icon', 'description', 'modelSelect', 'spawnPointSelect', 'teamIdSelect'
+        function setupEventListeners() {
+            // Language toggle
+            el('csharpTab').addEventListener('click', () => {
+                state.language = 'csharp';
+                updateTabStyles();
+                generateCode();
+            });
+            el('xluaTab').addEventListener('click', () => {
+                state.language = 'xlua';
+                updateTabStyles();
+                generateCode();
+            });
+
+            // Input changes
+            const inputs = ['namespace', 'className', 'displayName', 'configHpKey', 'defaultHp', 'category', 'icon',
+                'description', 'modelSelect', 'spawnPointSelect', 'teamIdSelect'
             ];
             inputs.forEach(id => el(id).addEventListener('input', generateCode));
 
-            el('hexColorPicker').addEventListener('input', e => {
+            // Color sync
+            el('hexColorPicker').addEventListener('input', (e) => {
                 el('hexColorText').value = e.target.value;
                 generateCode();
             });
-            el('hexColorText').addEventListener('input', e => {
+            el('hexColorText').addEventListener('input', (e) => {
                 el('hexColorPicker').value = e.target.value;
                 generateCode();
             });
-            el('modelSelect').addEventListener('change', e => {
-                el('ragdollPreview').innerText = e.target.value + '_ragdoll';
+
+            // Model -> ragdoll update
+            el('modelSelect').addEventListener('change', (e) => {
+                el('ragdollPreview').innerText = e.target.value + "_ragdoll";
             });
 
+            // Add buttons
             el('addVoiceChatBtn').addEventListener('click', () => {
-                state.voiceChats.push({ channel: '3D', active: true });
+                state.voiceChats.push({ channel: "3D", active: true });
                 renderVoiceChats();
                 generateCode();
             });
             el('addItemBtn').addEventListener('click', () => {
-                state.items.push('Coin');
+                state.items.push("Coin");
                 renderItems();
                 generateCode();
             });
 
+            // Copy button
             el('copyBtn').addEventListener('click', () => {
                 navigator.clipboard.writeText(el('codeOutput').value);
-                const t = el('copyText');
-                t.innerText = 'Скопировано!';
-                setTimeout(() => { t.innerText = 'Копировать'; }, 2000);
+                const btnText = el('copyText');
+                btnText.innerText = "Скопировано!";
+                el('copyBtn').classList.replace('btn-primary', 'bg-green-600');
+                setTimeout(() => {
+                    btnText.innerText = "Копировать";
+                    el('copyBtn').classList.replace('bg-green-600', 'btn-primary');
+                }, 2000);
             });
 
-            el('resetBtn').addEventListener('click', () => {
-                state.items = [];
-                state.voiceChats = [{ channel: '3D', active: true }];
-                Object.keys(state.overrides).forEach(k => {
-                    state.overrides[k].enabled = ['OnOpenInventory'].includes(k);
-                });
-                el('namespace').value = 'PluginExample';
-                el('className').value = 'CustomClass';
-                el('displayName').value = '<b>Уборщик</b>';
-                el('configHpKey').value = 'janitor_health';
-                el('defaultHp').value = 100;
-                el('hexColorPicker').value = '#fb00ff';
-                el('hexColorText').value = '#fb00ff';
-                el('category').value = 'Administration';
-                el('icon').value = 'ScientistIcon';
-                el('description').value = 'Убирайте комплекс.\\nПомогайте ученым.';
-                el('modelSelect').value = 'ply_scientist';
-                el('spawnPointSelect').value = 'scientistSpawn';
-                el('teamIdSelect').value = 'ClassD';
-                renderVoiceChats();
-                renderItems();
-                renderOverrides();
-                generateCode();
-            });
-
-            // Language toggle
-            document.querySelectorAll('#langToggle button').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('#langToggle button').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentLang = btn.dataset.lang;
-                    el('fileNameDisplay').innerText = el('className').value + (currentLang === 'xlua' ? '.lua' : '.cs');
-                    generateCode();
-                });
+            // Export button
+            el('exportBtn').addEventListener('click', () => {
+                const code = el('codeOutput').value;
+                const filename = state.language === 'csharp' ?
+                    `${el('className').value}.cs` :
+                    `${el('className').value}.lua`;
+                const blob = new Blob([code], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
             });
         }
 
-        // ============ RENDER DYNAMIC ============
+        function updateTabStyles() {
+            const csharpTab = el('csharpTab');
+            const xluaTab = el('xluaTab');
+            const langBadge = el('langBadge');
+
+            if (state.language === 'csharp') {
+                csharpTab.className = 'px-4 py-2 rounded-md text-sm font-medium tab-active transition-all';
+                xluaTab.className = 'px-4 py-2 rounded-md text-sm font-medium text-gray-400 hover:text-white transition-all';
+                langBadge.textContent = 'C#';
+                langBadge.className = 'text-xs px-2 py-1 rounded-full bg-purple-600/20 text-purple-400';
+                el('fileNameDisplay').textContent = el('className').value + '.cs';
+            } else {
+                xluaTab.className = 'px-4 py-2 rounded-md text-sm font-medium tab-active transition-all';
+                csharpTab.className =
+                    'px-4 py-2 rounded-md text-sm font-medium text-gray-400 hover:text-white transition-all';
+                langBadge.textContent = 'XLUA';
+                langBadge.className = 'text-xs px-2 py-1 rounded-full bg-blue-600/20 text-blue-400';
+                el('fileNameDisplay').textContent = el('className').value + '.lua';
+            }
+        }
+
+        // --- RENDER DYNAMIC PANELS ---
         function renderVoiceChats() {
-            const c = el('voiceChatList');
-            c.innerHTML = '';
-            state.voiceChats.forEach((vc, i) => {
+            const container = el('voiceChatList');
+            container.innerHTML = '';
+            state.voiceChats.forEach((vc, index) => {
                 const div = document.createElement('div');
-                div.className = 'flex items-center gap-2 bg-[#0d1117] p-2 rounded border border-[#30363d]';
+                div.className =
+                    "flex items-center gap-2 bg-[#0d1117] p-3 rounded-lg border border-[#30363d]";
 
-                const sel = document.createElement('select');
-                sel.className = 'input-field text-xs py-1 flex-1';
-                sel.innerHTML = VOICE_CHANNELS.map(ch => `<option value="${ch}" ${ch === vc.channel ? 'selected' : ''}>${ch}</option>`).join('');
-                sel.addEventListener('change', e => { state.voiceChats[i].channel = e.target.value; generateCode(); });
+                const select = document.createElement('select');
+                select.className = "input-field flex-1 p-2 text-sm";
+                select.innerHTML = VOICE_CHANNELS.map(c =>
+                    `<option value="${c}" ${c === vc.channel ? 'selected' : ''}>${c}</option>`
+                ).join('');
+                select.addEventListener('change', (e) => {
+                    state.voiceChats[index].channel = e.target.value;
+                    generateCode();
+                });
 
-                const lbl = document.createElement('label');
-                lbl.className = 'flex items-center gap-1.5 text-xs text-[#c9d1d9] cursor-pointer whitespace-nowrap';
-                const cb = document.createElement('input');
-                cb.type = 'checkbox';
-                cb.checked = vc.active;
-                cb.className = 'rounded';
-                cb.addEventListener('change', e => { state.voiceChats[i].active = e.target.checked; generateCode(); });
-                lbl.appendChild(cb);
-                lbl.appendChild(document.createTextNode('Вкл'));
+                const label = document.createElement('label');
+                label.className = "flex items-center gap-2 text-sm text-gray-300 cursor-pointer";
+                const checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = vc.active;
+                checkbox.className =
+                    "rounded border-[#30363d] text-purple-500 bg-[#0d1117] focus:ring-purple-500";
+                checkbox.addEventListener('change', (e) => {
+                    state.voiceChats[index].active = e.target.checked;
+                    generateCode();
+                });
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(" Вкл"));
 
-                const del = document.createElement('button');
-                del.className = 'remove-btn';
-                del.innerHTML = '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>';
-                del.addEventListener('click', () => { state.voiceChats.splice(i, 1); renderVoiceChats(); generateCode(); });
+                const delBtn = document.createElement('button');
+                delBtn.className = "text-red-400 hover:text-red-300 p-1.5 rounded-lg hover:bg-red-900/20";
+                delBtn.innerHTML = '<i class="lucide lucide-trash-2"></i>';
+                delBtn.addEventListener('click', () => {
+                    state.voiceChats.splice(index, 1);
+                    renderVoiceChats();
+                    generateCode();
+                });
 
-                div.appendChild(sel);
-                div.appendChild(lbl);
-                div.appendChild(del);
-                c.appendChild(div);
+                div.appendChild(select);
+                div.appendChild(label);
+                div.appendChild(delBtn);
+                container.appendChild(div);
             });
         }
 
         function renderItems() {
-            const c = el('itemsList');
-            c.innerHTML = '';
-            state.items.forEach((item, i) => {
+            const container = el('itemsList');
+            container.innerHTML = '';
+            state.items.forEach((item, index) => {
                 const div = document.createElement('div');
-                div.className = 'flex gap-2';
+                div.className = "flex gap-2";
 
-                const sel = document.createElement('select');
-                sel.className = 'input-field flex-1 text-xs';
-                sel.innerHTML = ITEMS.map(it => `<option value="${it}" ${it === item ? 'selected' : ''}>${it}</option>`).join('');
-                sel.addEventListener('change', e => { state.items[i] = e.target.value; generateCode(); });
+                const select = document.createElement('select');
+                select.className = "input-field flex-1 p-2.5 text-sm";
+                select.innerHTML = ITEMS.map(i =>
+                    `<option value="${i}" ${i === item ? 'selected' : ''}>${i}</option>`
+                ).join('');
+                select.addEventListener('change', (e) => {
+                    state.items[index] = e.target.value;
+                    generateCode();
+                });
 
-                const del = document.createElement('button');
-                del.className = 'remove-btn';
-                del.innerHTML = '<i data-lucide="trash-2" class="w-3.5 h-3.5"></i>';
-                del.addEventListener('click', () => { state.items.splice(i, 1); renderItems(); generateCode(); });
+                const delBtn = document.createElement('button');
+                delBtn.className =
+                    "bg-red-900/20 text-red-400 hover:bg-red-900/40 px-3 py-2 rounded-lg border border-red-800/30 transition-colors";
+                delBtn.innerHTML = '<i class="lucide lucide-trash-2"></i>';
+                delBtn.addEventListener('click', () => {
+                    state.items.splice(index, 1);
+                    renderItems();
+                    generateCode();
+                });
 
-                div.appendChild(sel);
-                div.appendChild(del);
-                c.appendChild(div);
+                div.appendChild(select);
+                div.appendChild(delBtn);
+                container.appendChild(div);
             });
         }
 
         function renderOverrides() {
-            const c = el('overridesContainer');
-            c.innerHTML = '';
+            const container = el('overridesContainer');
+            container.innerHTML = '';
             Object.keys(state.overrides).forEach(key => {
                 const data = state.overrides[key];
                 const div = document.createElement('div');
-                div.className = 'flex items-center justify-between gap-3 p-2 rounded bg-[#0d1117] border border-[#30363d] flex-wrap';
+                div.className =
+                    "flex items-center justify-between p-3 rounded-lg bg-[#0d1117] border border-[#30363d] gap-4 flex-wrap md:flex-nowrap";
 
-                const lbl = document.createElement('label');
-                lbl.className = 'flex items-center gap-2 cursor-pointer text-xs text-[#c9d1d9]';
-                const cb = document.createElement('input');
-                cb.type = 'checkbox';
-                cb.checked = data.enabled;
-                cb.className = 'rounded';
-                lbl.appendChild(cb);
-                lbl.appendChild(document.createTextNode(data.label));
+                const labelWrapper = document.createElement('label');
+                labelWrapper.className =
+                    "flex items-center gap-2 cursor-pointer select-none text-sm text-gray-300 min-w-max";
 
-                const vc = document.createElement('div');
-                vc.className = 'flex-1 flex justify-end min-w-[100px]';
+                const checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = data.enabled;
+                checkbox.className =
+                    "rounded border-[#30363d] text-purple-500 bg-[#0d1117] focus:ring-purple-500";
 
-                const updateVal = () => {
-                    vc.innerHTML = '';
+                labelWrapper.appendChild(checkbox);
+                labelWrapper.appendChild(document.createTextNode(data.label));
+                div.appendChild(labelWrapper);
+
+                const valContainer = document.createElement('div');
+                valContainer.className = "flex-1 flex justify-end min-w-[120px]";
+
+                const updateInputVisibility = () => {
+                    valContainer.innerHTML = '';
                     if (data.enabled) {
                         if (data.type === 'bool') {
-                            const s = document.createElement('select');
-                            s.className = 'input-field text-xs py-1';
-                            s.innerHTML = `<option value="true" ${data.value ? 'selected' : ''}>true</option><option value="false" ${!data.value ? 'selected' : ''}>false</option>`;
-                            s.addEventListener('change', e => { data.value = e.target.value === 'true'; generateCode(); });
-                            vc.appendChild(s);
+                            const sel = document.createElement('select');
+                            sel.className =
+                                "input-field p-1.5 text-xs";
+                            sel.innerHTML =
+                                `<option value="true" ${data.value ? 'selected':''}>true</option><option value="false" ${!data.value ? 'selected':''}>false</option>`;
+                            sel.addEventListener('change', e => {
+                                data.value = e.target.value === 'true';
+                                generateCode();
+                            });
+                            valContainer.appendChild(sel);
                         } else {
                             const inp = document.createElement('input');
                             inp.type = data.type;
+                            if (data.type === 'number') inp.step = "0.1";
                             inp.value = data.value;
-                            inp.className = 'input-field text-xs py-1 max-w-[140px]';
-                            if (data.type === 'number') inp.step = '0.1';
+                            inp.className =
+                                "input-field p-1.5 px-2 text-xs w-full max-w-[150px]";
                             inp.addEventListener('input', e => {
-                                data.value = data.type === 'number' ? (parseFloat(e.target.value) || 0) : e.target.value;
+                                data.value = data.type === 'number' ? (parseFloat(e
+                                    .target.value) || 0) : e.target.value;
                                 generateCode();
                             });
-                            vc.appendChild(inp);
+                            valContainer.appendChild(inp);
                         }
                     }
                 };
 
-                cb.addEventListener('change', e => { data.enabled = e.target.checked; updateVal(); generateCode(); });
-                updateVal();
-                div.appendChild(lbl);
-                div.appendChild(vc);
-                c.appendChild(div);
+                updateInputVisibility();
+                checkbox.addEventListener('change', e => {
+                    data.enabled = e.target.checked;
+                    updateInputVisibility();
+                    generateCode();
+                });
+
+                div.appendChild(valContainer);
+                container.appendChild(div);
             });
         }
 
-        // ============ CODE GENERATION ============
+        // --- CODE GENERATION ---
         function generateCode() {
             const v = {
-                namespace: el('namespace').value || 'PluginExample',
-                className: el('className').value || 'CustomClass',
+                namespace: el('namespace').value || "PluginExample",
+                className: el('className').value || "CustomClass",
                 displayName: el('displayName').value,
-                cleanName: stripHtml(el('displayName').value),
+                cleanName: stripHtmlTags(el('displayName').value),
                 configHpKey: el('configHpKey').value,
                 defaultHp: el('defaultHp').value,
                 hexColor: el('hexColorText').value,
@@ -639,61 +661,80 @@
                 teamId: el('teamIdSelect').value
             };
 
-            el('fileNameDisplay').innerText = v.className + (currentLang === 'xlua' ? '.lua' : '.cs');
+            el('fileNameDisplay').textContent = state.language === 'csharp' ?
+                v.className + ".cs" : v.className + ".lua";
+            el('langBadge').textContent = state.language === 'csharp' ? 'C#' : 'XLUA';
+
             const rgb = hexToRgb(v.hexColor);
 
             let code = '';
-            if (currentLang === 'csharp') {
-                code = generateCSharp(v, rgb);
+            if (state.language === 'csharp') {
+                code = generateCSharpCode(v, rgb);
             } else {
-                code = generateXLua(v, rgb);
+                code = generateXLUACode(v, rgb);
             }
 
             el('codeOutput').value = code;
         }
 
-        function generateCSharp(v, rgb) {
-            const itemsCode = state.items.map(it => `                player.GiveItem("${it}");`).join('\n');
+        function generateCSharpCode(v, rgb) {
+            const itemsCode = state.items.map(item =>
+                `                player.GiveItem("${item}");`
+            ).join('\n');
+
             const voiceCode = state.voiceChats.length > 0 ?
-                `                PlayerUtilities.SetVoiceChat(${state.voiceChats.map(vc => `("${vc.channel}", ${vc.active ? 'true' : 'false'})`).join(', ')});` :
+                `PlayerUtilities.SetVoiceChat(${state.voiceChats.map(vc => `("${vc.channel}", ${vc.active ? 'true' : 'false'})`).join(', ')});` :
                 '';
 
-            let ovr = '';
-            const o = state.overrides;
-            if (o.OnOpenInventory.enabled) ovr += `\n        public override bool OnOpenInventory() => ${o.OnOpenInventory.value ? 'true' : 'false'};\n`;
-            if (o.CanMove.enabled) ovr += `\n        public override bool CanMove() => ${o.CanMove.value ? 'true' : 'false'};\n`;
-            if (o.CanInteract.enabled) ovr += `\n        public override bool CanInteract() => ${o.CanInteract.value ? 'true' : 'false'};\n`;
-            if (o.CanTakeDamage.enabled) ovr += `\n        public override bool CanTakeDamage() => ${o.CanTakeDamage.value ? 'true' : 'false'};\n`;
-            if (o.IgnoreSCP.enabled) ovr += `\n        public override bool IgnoreSCP() => ${o.IgnoreSCP.value ? 'true' : 'false'};\n`;
-            if (o.CheckpointPass.enabled) ovr += `\n        public override bool CheckpointPass() => ${o.CheckpointPass.value ? 'true' : 'false'};\n`;
-            if (o.UseCameraRotation.enabled) ovr += `\n        public override bool UseCameraRotation() => ${o.UseCameraRotation.value ? 'true' : 'false'};\n`;
-            if (o.GetPlayerInfo.enabled) ovr += `\n        public override string GetPlayerInfo(HitBox box) => "${o.GetPlayerInfo.value}";\n`;
-            if (o.GetDeadInfo.enabled) ovr += `\n        public override string GetDeadInfo(DeadBox box) => "${o.GetDeadInfo.value}";\n`;
-            if (o.GetResistance.enabled) ovr += `\n        public override float GetResistance() => ${o.GetResistance.value}f;\n`;
-            if (o.GetSpectatorBone.enabled) ovr += `\n        public override string GetSpectatorBone() => "${o.GetSpectatorBone.value}";\n`;
+            let ovrCode = "";
+            const ovr = state.overrides;
+            if (ovr.OnOpenInventory.enabled) ovrCode +=
+                `\n        public override bool OnOpenInventory() => ${ovr.OnOpenInventory.value ? 'true' : 'false'};\n`;
+            if (ovr.CanMove.enabled) ovrCode +=
+                `\n        public override bool CanMove() => ${ovr.CanMove.value ? 'true' : 'false'};\n`;
+            if (ovr.CanInteract.enabled) ovrCode +=
+                `\n        public override bool CanInteract() => ${ovr.CanInteract.value ? 'true' : 'false'};\n`;
+            if (ovr.IgnoreSCP.enabled) ovrCode +=
+                `\n        public override bool IgnoreSCP() => ${ovr.IgnoreSCP.value ? 'true' : 'false'};\n`;
+            if (ovr.CheckpointPass.enabled) ovrCode +=
+                `\n        public override bool CheckpointPass() => ${ovr.CheckpointPass.value ? 'true' : 'false'};\n`;
+            if (ovr.CanTakeDamage.enabled) ovrCode +=
+                `\n        public override bool CanTakeDamage() => ${ovr.CanTakeDamage.value ? 'true' : 'false'};\n`;
+            if (ovr.UseCameraRotation.enabled) ovrCode +=
+                `\n        public override bool UseCameraRotation() => ${ovr.UseCameraRotation.value ? 'true' : 'false'};\n`;
+            if (ovr.GetPlayerInfo.enabled) ovrCode +=
+                `\n        public override string GetPlayerInfo(HitBox box) => "${ovr.GetPlayerInfo.value}";\n`;
+            if (ovr.GetDeadInfo.enabled) ovrCode +=
+                `\n        public override string GetDeadInfo(DeadBox box) => "${ovr.GetDeadInfo.value}";\n`;
+            if (ovr.GetResistance.enabled) ovrCode +=
+                `\n        public override float GetResistance() => ${ovr.GetResistance.value}f;\n`;
+            if (ovr.GetSpectatorBone.enabled) ovrCode +=
+                `\n        public override string GetSpectatorBone() => "${ovr.GetSpectatorBone.value}";\n`;
 
             return `using System.Collections.Generic;
-        using System.Linq;
-        using Akequ.Base;
         using UnityEngine;
+        using Akequ.Base;
+        using System.Linq;
 
         namespace ${v.namespace}
         {
             public class ${v.className} : PlayerClass
-            {
+            {${ovrCode}
                 public override void Init()
                 {
-                    player.InitHealth((uint)Config.GetInt("${v.configHpKey}", ${v.defaultHp}), new Color(${rgb.r}f, ${rgb.g}f, ${rgb.b}f, 1f), "${v.cleanName}");
+                    player.InitHealth((uint)Config.GetInt("${v.configHpKey}", ${v.defaultHp}), new UnityEngine.Color(${rgb.r}f, ${rgb.g}f, ${rgb.b}f, 1f), "${v.cleanName}");
                     player.SetHitbox(new Vector3(0.8f, 1.8f, 0.8f), Vector3.zero);
-
+                    
                     if (player.isLocalPlayer)
                     {
                         player.PlayBellSound(1);
                         UIManager.SetMobileButtons(new List<string>() { "Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch" });
-                        TransitionManager.ShowClass("${v.hexColor.replace('#','').toUpperCase()}", "${v.displayName}", "${v.description}", "${v.category}", "${v.icon}");
+                        
+                        TransitionManager.ShowClass("${v.hexColor.toUpperCase()}", "${v.displayName}", "${v.description}", "${v.category}", "${v.icon}");
+                        
                         ${voiceCode}
                     }
-
+                    
                     playerModel = player.SpawnHumanoidModel("${v.model}");
                     playerModel.transform.localPosition = new Vector3(0f, -0.83f, 0f);
                     PlayerUtilities.SpawnHitboxes(player, playerModel);
@@ -703,6 +744,7 @@
                         var points = player.GetSpawnPoints("${v.spawnPoint}");
                         var point = points.ElementAt(Random.Range(0, points.Count));
                         player.Teleport(point.Key.position + new Vector3(0f, 1.25f, 0f), point.Value);
+
         ${itemsCode}
                     }
                 }
@@ -721,29 +763,50 @@
                 }
 
                 public override string GetName() => "${v.cleanName}";
+
                 public override string GetTeamID() => "${v.teamId}";
-                public override string GetClassColor() => "${v.hexColor.replace('#','').toUpperCase()}";${ovr}
+
+                public override string GetClassColor() => "${v.hexColor.replace('#', '').toUpperCase()}";
             }
         }`;
         }
 
-        function generateXLua(v, rgb) {
-            const itemsCode = state.items.map(it => `        self.main.player:GiveItem("${it}")`).join('\n');
-            const voiceChannels = state.voiceChats.map(vc => `PlayerUtilities.CreateValueTuple("${vc.channel}", ${vc.active ? 'true' : 'false'})`).join(', ');
+        function generateXLUACode(v, rgb) {
+            const itemsCode = state.items.map(item =>
+                `        self.main.player:GiveItem("${item}")`
+            ).join('\n');
 
-            let overrides = '';
-            const o = state.overrides;
-            if (o.OnOpenInventory.enabled) overrides += `\nfunction ${v.className}:OnOpenInventory()\n    return ${o.OnOpenInventory.value ? 'true' : 'false'}\nend\n`;
-            if (o.CanMove.enabled) overrides += `\nfunction ${v.className}:CanMove()\n    return ${o.CanMove.value ? 'true' : 'false'}\nend\n`;
-            if (o.CanInteract.enabled) overrides += `\nfunction ${v.className}:CanInteract()\n    return ${o.CanInteract.value ? 'true' : 'false'}\nend\n`;
-            if (o.CanTakeDamage.enabled) overrides += `\nfunction ${v.className}:CanTakeDamage()\n    return ${o.CanTakeDamage.value ? 'true' : 'false'}\nend\n`;
-            if (o.IgnoreSCP.enabled) overrides += `\nfunction ${v.className}:IgnoreSCP()\n    return ${o.IgnoreSCP.value ? 'true' : 'false'}\nend\n`;
-            if (o.CheckpointPass.enabled) overrides += `\nfunction ${v.className}:CheckpointPass()\n    return ${o.CheckpointPass.value ? 'true' : 'false'}\nend\n`;
-            if (o.UseCameraRotation.enabled) overrides += `\nfunction ${v.className}:UseCameraRotation()\n    return ${o.UseCameraRotation.value ? 'true' : 'false'}\nend\n`;
-            if (o.GetPlayerInfo.enabled) overrides += `\nfunction ${v.className}:GetPlayerInfo(box)\n    return "${o.GetPlayerInfo.value}"\nend\n`;
-            if (o.GetDeadInfo.enabled) overrides += `\nfunction ${v.className}:GetDeadInfo(box)\n    return "${o.GetDeadInfo.value}"\nend\n`;
-            if (o.GetResistance.enabled) overrides += `\nfunction ${v.className}:GetResistance()\n    return ${o.GetResistance.value}\nend\n`;
-            if (o.GetSpectatorBone.enabled) overrides += `\nfunction ${v.className}:GetSpectatorBone()\n    return "${o.GetSpectatorBone.value}"\nend\n`;
+            const voiceChats = state.voiceChats.map(vc =>
+                `PlayerUtilities.CreateValueTuple("${vc.channel}", ${vc.active ? 'true' : 'false'})`
+            ).join(', ');
+            const voiceCode = state.voiceChats.length > 0 ?
+                `        PlayerUtilities.SetVoiceChat(${voiceChats})` :
+                '';
+
+            let ovrCode = "";
+            const ovr = state.overrides;
+            if (ovr.OnOpenInventory.enabled) ovrCode +=
+                `\nfunction ${v.className}:OnOpenInventory()\n    return ${ovr.OnOpenInventory.value ? 'true' : 'false'}\nend\n`;
+            if (ovr.CanMove.enabled) ovrCode +=
+                `\nfunction ${v.className}:CanMove()\n    return ${ovr.CanMove.value ? 'true' : 'false'}\nend\n`;
+            if (ovr.CanInteract.enabled) ovrCode +=
+                `\nfunction ${v.className}:CanInteract()\n    return ${ovr.CanInteract.value ? 'true' : 'false'}\nend\n`;
+            if (ovr.IgnoreSCP.enabled) ovrCode +=
+                `\nfunction ${v.className}:IgnoreSCP()\n    return ${ovr.IgnoreSCP.value ? 'true' : 'false'}\nend\n`;
+            if (ovr.CheckpointPass.enabled) ovrCode +=
+                `\nfunction ${v.className}:CheckpointPass()\n    return ${ovr.CheckpointPass.value ? 'true' : 'false'}\nend\n`;
+            if (ovr.CanTakeDamage.enabled) ovrCode +=
+                `\nfunction ${v.className}:CanTakeDamage()\n    return ${ovr.CanTakeDamage.value ? 'true' : 'false'}\nend\n`;
+            if (ovr.UseCameraRotation.enabled) ovrCode +=
+                `\nfunction ${v.className}:UseCameraRotation()\n    return ${ovr.UseCameraRotation.value ? 'true' : 'false'}\nend\n`;
+            if (ovr.GetPlayerInfo.enabled) ovrCode +=
+                `\nfunction ${v.className}:GetPlayerInfo(box)\n    return "${ovr.GetPlayerInfo.value}"\nend\n`;
+            if (ovr.GetDeadInfo.enabled) ovrCode +=
+                `\nfunction ${v.className}:GetDeadInfo(box)\n    return "${ovr.GetDeadInfo.value}"\nend\n`;
+            if (ovr.GetResistance.enabled) ovrCode +=
+                `\nfunction ${v.className}:GetResistance()\n    return ${ovr.GetResistance.value}\nend\n`;
+            if (ovr.GetSpectatorBone.enabled) ovrCode +=
+                `\nfunction ${v.className}:GetSpectatorBone()\n    return "${ovr.GetSpectatorBone.value}"\nend\n`;
 
             return `local Vector3 = CS.UnityEngine.Vector3
         local TransitionManager = CS.TransitionManager
@@ -755,18 +818,18 @@
 
         ---@class ${v.className}:CS.Akequ.Base.PlayerClass
         ${v.className} = {}
-
+        ${ovrCode}
         function ${v.className}:Init()
             self.main.player:InitHealth(CS.Config.GetInt("${v.configHpKey}", ${v.defaultHp}), Color(${rgb.r}, ${rgb.g}, ${rgb.b}, 1), "${v.cleanName}")
             self.main.player:SetHitbox(Vector3(0.8, 1.8, 0.8), Vector3.zero)
-
+            
             if self.main.player.isLocalPlayer then
                 self.main.player:PlayBellSound(1)
-                UIManager.SetMobileButtons({"Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch"})
-                TransitionManager.ShowClass("${v.hexColor:upper()}", "${v.displayName}", "${v.description}", "${v.category}", "${v.icon}")
-                PlayerUtilities.SetVoiceChat(${voiceChannels})
+                UIManager.SetMobileButtons({ "Move", "Rotate", "Pause", "PlayerList", "Interact", "Jump", "Run", "Inventory", "Voice", "Crouch" })
+                TransitionManager.ShowClass("${v.hexColor.toUpperCase()}", "${v.displayName}", "${v.description}", "${v.category}", "${v.icon}")
+                ${voiceCode}
             end
-
+            
             self.main.playerModel = self.main.player:SpawnHumanoidModel("${v.model}")
             self.main.playerModel.transform.localPosition = Vector3(0, -0.83, 0)
             PlayerUtilities.SpawnHitboxes(self.main.player, self.main.playerModel)
@@ -775,22 +838,26 @@
                 local points = self.main.player:GetSpawnPoints("${v.spawnPoint}")
                 local keys = {}
                 local vals = {}
-                for k, v in pairs(points) do
-                    table.insert(keys, k)
-                    table.insert(vals, v)
+                for i = 0, points.Keys.Count - 1 do
+                    table.insert(keys, points.Keys[i])
+                    table.insert(vals, points.Values[i])
                 end
-                local i = math.random(1, #keys)
-                self.main.player:Teleport(keys[i].position + Vector3(0, 1.25, 0), vals[i])
+                local index = math.random(1, #keys)
+                self.main.player:Teleport(keys[index].position + Vector3(0, 1.25, 0), vals[index])
+
         ${itemsCode}
             end
+            
+            self.main.player:SetSpeed(3, 6.5, 1.1)
+            self.main.player:SetJumpPower(3.5)
         end
 
         function ${v.className}:OnStop()
             if self.main.playerModel ~= nil then
-                local ragdoll = PlayerUtilities.SpawnRagdoll(self.main.player, self.main.playerModel)
+                PlayerUtilities.SpawnRagdoll(self.main.player, self.main.playerModel)
                 GameObject.Destroy(self.main.playerModel)
             else
-                local ragdoll = PlayerUtilities.SpawnRagdoll(self.main.player, "${v.model}_ragdoll")
+                PlayerUtilities.SpawnRagdoll(self.main.player, "${v.model}_ragdoll")
             end
         end
 
@@ -803,14 +870,14 @@
         end
 
         function ${v.className}:GetClassColor()
-            return "${v.hexColor:gsub('#', ''):upper()}"
+            return "${v.hexColor.replace('#', '').toUpperCase()}"
         end
-        ${overrides}
+
         return ${v.className}`;
         }
 
-        // ============ START ============
-        document.addEventListener('DOMContentLoaded', init);
+        // Boot
+        document.addEventListener("DOMContentLoaded", init);
     </script>
 </body>
 </html>
